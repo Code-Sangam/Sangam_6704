@@ -8,8 +8,16 @@ const helmet = require('helmet');
 const http = require('http');
 const socketIo = require('socket.io');
 
-// Import database configuration
-const { sequelize, initializeDatabase } = require('./config/database');
+// Import database configuration with error handling
+let sequelize, initializeDatabase;
+try {
+  const dbConfig = require('./config/database');
+  sequelize = dbConfig.sequelize;
+  initializeDatabase = dbConfig.initializeDatabase;
+} catch (error) {
+  console.error('❌ Failed to load database configuration:', error.message);
+  // Continue without database for now to see other errors
+}
 
 // Import routes
 const indexRoutes = require('./routes/index');
@@ -84,8 +92,23 @@ app.set('layout extractStyles', true);
 app.use(morgan('combined'));
 
 // Session configuration with enhanced security
-const { createSessionMiddleware, scheduleSessionCleanup } = require('./config/session');
-const { middleware: sessionMiddleware, store: sessionStore } = createSessionMiddleware();
+let sessionMiddleware, sessionStore;
+try {
+  const { createSessionMiddleware, scheduleSessionCleanup } = require('./config/session');
+  const sessionConfig = createSessionMiddleware();
+  sessionMiddleware = sessionConfig.middleware;
+  sessionStore = sessionConfig.store;
+} catch (error) {
+  console.error('❌ Failed to load session configuration:', error.message);
+  // Use basic session as fallback
+  const session = require('express-session');
+  sessionMiddleware = session({
+    secret: process.env.SESSION_SECRET || 'fallback-secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }
+  });
+}
 
 app.use(sessionMiddleware);
 
@@ -137,15 +160,31 @@ const startServer = async () => {
     console.log(`📂 Current working directory: ${process.cwd()}`);
     console.log(`📂 __dirname: ${__dirname}`);
     
-    // Initialize database connection
-    console.log('📊 Initializing database connection...');
-    await initializeDatabase();
-    console.log('✅ Database connection established');
+    // Initialize database connection (if available)
+    if (initializeDatabase) {
+      console.log('📊 Initializing database connection...');
+      try {
+        await initializeDatabase();
+        console.log('✅ Database connection established');
+      } catch (dbError) {
+        console.error('⚠️ Database connection failed, continuing without database:', dbError.message);
+      }
+    } else {
+      console.log('⚠️ Database configuration not loaded, skipping database initialization');
+    }
     
-    // Sync session store
-    console.log('🔄 Synchronizing session store...');
-    await sessionStore.sync();
-    console.log('✅ Session store synchronized');
+    // Sync session store (if available)
+    if (sessionStore && sessionStore.sync) {
+      console.log('🔄 Synchronizing session store...');
+      try {
+        await sessionStore.sync();
+        console.log('✅ Session store synchronized');
+      } catch (sessionError) {
+        console.error('⚠️ Session store sync failed, continuing with basic sessions:', sessionError.message);
+      }
+    } else {
+      console.log('⚠️ Using basic session store (no database persistence)');
+    }
     
     // Start server
     server.listen(PORT, '0.0.0.0', () => {

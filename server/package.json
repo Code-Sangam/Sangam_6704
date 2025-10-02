@@ -5,8 +5,9 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "start:railway": "NODE_ENV=production node app.js",
     "dev": "nodemon app.js",
-    "build": "npm install",
+    "build": "echo 'No build step needed'",
     "build:webpack": "webpack --mode production",
     "build:dev": "webpack --mode development",
     "test": "jest",

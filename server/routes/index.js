@@ -37,6 +37,17 @@ router.get('/debug', (req, res) => {
   });
 });
 
+// Simple test route
+router.get('/test', (req, res) => {
+  res.send(`
+    <h1>🚀 Server is Running!</h1>
+    <p>Timestamp: ${new Date().toISOString()}</p>
+    <p>Environment: ${process.env.NODE_ENV || 'development'}</p>
+    <p>Working Directory: ${process.cwd()}</p>
+    <p><a href="/health">Health Check</a> | <a href="/debug">Debug Info</a></p>
+  `);
+});
+
 // Homepage route
 router.get('/', (req, res) => {
   try {
@@ -51,6 +62,7 @@ router.get('/', (req, res) => {
       <h1>Server Error</h1>
       <p>Error rendering homepage: ${error.message}</p>
       <p>Please check server logs for details.</p>
+      <p><a href="/test">Test Page</a> | <a href="/health">Health Check</a></p>
     `);
   }
 });
