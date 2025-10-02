@@ -1,0 +1,340 @@
+<%- contentFor('styles') %>
+<link rel="stylesheet" href="/css/settings.css">
+
+<%- contentFor('scripts') %>
+<script src="/js/settings.js"></script>
+
+<div class="settings-container">
+  <!-- Settings Navigation -->
+  <nav class="settings-nav">
+    <div class="nav-header">
+      <a href="/profile" class="back-link">
+        <i class="icon-arrow-left"></i>
+        <span>Go back</span>
+      </a>
+      
+      <div class="nav-brand">
+        <a href="/">
+          <div class="brand-logo">S</div>
+          <span class="brand-text">Sangam</span>
+        </a>
+      </div>
+      
+      <form action="/auth/logout" method="POST" class="logout-form">
+        <button type="submit" class="logout-btn">
+          <i class="icon-log-out"></i>
+          <span>Sign Out</span>
+        </button>
+      </form>
+    </div>
+  </nav>
+
+  <div class="settings-layout">
+    <!-- Left Sidebar -->
+    <div class="settings-sidebar">
+      <div class="sidebar-content">
+        <h2 class="sidebar-title">Settings</h2>
+        <nav class="sidebar-nav">
+          <!-- Edit Profile -->
+          <button class="nav-item active" data-section="edit-profile">
+            <i class="icon-user"></i>
+            <span>Edit Profile</span>
+          </button>
+          
+          <!-- Change Password -->
+          <button class="nav-item" data-section="change-password">
+            <i class="icon-shield"></i>
+            <span>Change Password</span>
+          </button>
+          
+          <!-- Account Activity -->
+          <button class="nav-item" data-section="activity">
+            <i class="icon-activity"></i>
+            <span>Account Activity</span>
+          </button>
+          
+          <!-- Active Sessions -->
+          <button class="nav-item" data-section="sessions">
+            <i class="icon-monitor"></i>
+            <span>Active Sessions</span>
+          </button>
+          
+          <!-- Privacy & Security -->
+          <button class="nav-item" data-section="privacy">
+            <i class="icon-lock"></i>
+            <span>Privacy & Security</span>
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="settings-main">
+      <div class="settings-content">
+        <!-- Header -->
+        <div class="content-header">
+          <h1>Settings</h1>
+          <p>Manage your account settings and preferences</p>
+        </div>
+
+        <!-- Edit Profile Section -->
+        <div class="settings-section active" id="edit-profile">
+          <div class="section-card">
+            <div class="card-header">
+              <h2>
+                <i class="icon-edit"></i>
+                Edit Profile Information
+              </h2>
+              <p>Update your personal and professional details</p>
+            </div>
+            
+            <div class="card-content">
+              <form id="profileForm" class="profile-form">
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="firstName" value="<%= user.profile?.firstName || '' %>" required>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" value="<%= user.profile?.lastName || '' %>" required>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="<%= user.email %>" required>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="role">Role</label>
+                    <select id="role" name="role" disabled>
+                      <option value="student" <%= user.role === 'student' ? 'selected' : '' %>>Student</option>
+                      <option value="alumni" <%= user.role === 'alumni' ? 'selected' : '' %>>Alumni</option>
+                      <option value="faculty" <%= user.role === 'faculty' ? 'selected' : '' %>>Faculty</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <% if (user.role === 'alumni') { %>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="company">Company</label>
+                    <input type="text" id="company" name="company" value="<%= user.profile?.company || '' %>">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="position">Position</label>
+                    <input type="text" id="position" name="position" value="<%= user.profile?.position || '' %>">
+                  </div>
+                </div>
+                <% } %>
+                
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="university">University</label>
+                    <input type="text" id="university" name="university" value="<%= user.profile?.university || '' %>">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="major">Major</label>
+                    <input type="text" id="major" name="major" value="<%= user.profile?.major || '' %>">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="graduationYear">Graduation Year</label>
+                    <input type="number" id="graduationYear" name="graduationYear" value="<%= user.profile?.graduationYear || '' %>" min="1950" max="2030">
+                  </div>
+                </div>
+                
+                <div class="form-group full-width">
+                  <label for="bio">Bio</label>
+                  <textarea id="bio" name="bio" rows="4" placeholder="Tell us about yourself..."><%= user.profile?.bio || '' %></textarea>
+                </div>
+                
+                <div class="form-group full-width">
+                  <label for="linkedinUrl">LinkedIn URL</label>
+                  <input type="url" id="linkedinUrl" name="linkedinUrl" value="<%= user.profile?.linkedinUrl || '' %>" placeholder="https://linkedin.com/in/yourprofile">
+                </div>
+                
+                <div class="form-group full-width">
+                  <label for="githubUrl">GitHub URL</label>
+                  <input type="url" id="githubUrl" name="githubUrl" value="<%= user.profile?.githubUrl || '' %>" placeholder="https://github.com/yourusername">
+                </div>
+                
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Save Changes</button>
+                  <button type="button" class="btn btn-secondary" onclick="resetForm()">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Change Password Section -->
+        <div class="settings-section" id="change-password">
+          <div class="section-card">
+            <div class="card-header">
+              <h2>
+                <i class="icon-shield"></i>
+                Change Password
+              </h2>
+              <p>Update your account password for better security</p>
+            </div>
+            
+            <div class="card-content">
+              <form id="passwordForm" class="password-form">
+                <div class="form-group">
+                  <label for="currentPassword">Current Password</label>
+                  <input type="password" id="currentPassword" name="currentPassword" required>
+                </div>
+                
+                <div class="form-group">
+                  <label for="newPassword">New Password</label>
+                  <input type="password" id="newPassword" name="newPassword" required>
+                  <div class="password-strength" id="passwordStrength"></div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="confirmPassword">Confirm New Password</label>
+                  <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                
+                <div class="password-requirements">
+                  <h4>Password Requirements:</h4>
+                  <ul>
+                    <li id="req-length">At least 8 characters long</li>
+                    <li id="req-uppercase">Contains at least one uppercase letter</li>
+                    <li id="req-lowercase">Contains at least one lowercase letter</li>
+                    <li id="req-number">Contains at least one number</li>
+                    <li id="req-special">Contains at least one special character</li>
+                  </ul>
+                </div>
+                
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Update Password</button>
+                  <button type="button" class="btn btn-secondary" onclick="clearPasswordForm()">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Account Activity Section -->
+        <div class="settings-section" id="activity">
+          <div class="section-card">
+            <div class="card-header">
+              <h2>
+                <i class="icon-activity"></i>
+                Account Activity
+              </h2>
+              <p>Review your recent account activity and interactions</p>
+            </div>
+            
+            <div class="card-content">
+              <div class="activity-list" id="activityList">
+                <div class="loading">Loading activity...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Sessions Section -->
+        <div class="settings-section" id="sessions">
+          <div class="section-card">
+            <div class="card-header">
+              <h2>
+                <i class="icon-monitor"></i>
+                Active Sessions
+              </h2>
+              <p>Monitor and manage your active login sessions</p>
+            </div>
+            
+            <div class="card-content">
+              <div class="security-tip">
+                <i class="icon-info"></i>
+                <div>
+                  <strong>Security Tip:</strong>
+                  If you notice any suspicious activity or unrecognized sessions, terminate them immediately and change your password.
+                </div>
+              </div>
+              
+              <div class="sessions-list" id="sessionsList">
+                <div class="loading">Loading sessions...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Privacy & Security Section -->
+        <div class="settings-section" id="privacy">
+          <div class="section-card">
+            <div class="card-header">
+              <h2>
+                <i class="icon-lock"></i>
+                Privacy & Security
+              </h2>
+              <p>Manage your privacy settings and security preferences</p>
+            </div>
+            
+            <div class="card-content">
+              <form id="privacyForm" class="privacy-form">
+                <div class="privacy-setting">
+                  <div class="setting-info">
+                    <h4>Profile Visibility</h4>
+                    <p>Control who can see your profile information</p>
+                  </div>
+                  <select name="profileVisibility">
+                    <option value="public">Public</option>
+                    <option value="network">Network Only</option>
+                    <option value="private">Private</option>
+                  </select>
+                </div>
+                
+                <div class="privacy-setting">
+                  <div class="setting-info">
+                    <h4>Message Notifications</h4>
+                    <p>Receive notifications for new messages</p>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" name="messageNotifications" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                
+                <div class="privacy-setting">
+                  <div class="setting-info">
+                    <h4>Email Notifications</h4>
+                    <p>Receive email updates about your account</p>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" name="emailNotifications" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                
+                <div class="privacy-setting">
+                  <div class="setting-info">
+                    <h4>Show Online Status</h4>
+                    <p>Let others see when you're online</p>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" name="showOnlineStatus" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Save Privacy Settings</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Success/Error Messages -->
+<div id="messageContainer" class="message-container"></div>

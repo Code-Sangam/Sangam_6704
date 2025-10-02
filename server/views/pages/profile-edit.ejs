@@ -1,0 +1,798 @@
+<!-- Profile Edit Page -->
+<section class="profile-edit-page">
+    <div class="container">
+        <div class="edit-layout">
+            <!-- Header -->
+            <div class="edit-header">
+                <div class="header-content">
+                    <h1 class="page-title">Edit Profile</h1>
+                    <p class="page-description">Update your profile information to help others connect with you</p>
+                </div>
+                
+                <div class="header-actions">
+                    <a href="/profile" class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Profile
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Edit Form -->
+            <form class="profile-form" action="/profile/edit" method="POST" id="profile-form">
+                <div class="form-sections">
+                    <!-- Basic Information -->
+                    <div class="form-section" id="basic-info">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <i class="fas fa-user"></i>
+                                Basic Information
+                            </h2>
+                        </div>
+                        
+                        <div class="section-content">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName" class="form-label">First Name *</label>
+                                    <input 
+                                        type="text" 
+                                        id="firstName" 
+                                        name="firstName" 
+                                        class="form-input" 
+                                        value="<%= profile ? profile.first_name : '' %>"
+                                        required
+                                    >
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="lastName" class="form-label">Last Name *</label>
+                                    <input 
+                                        type="text" 
+                                        id="lastName" 
+                                        name="lastName" 
+                                        class="form-input" 
+                                        value="<%= profile ? profile.last_name : '' %>"
+                                        required
+                                    >
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bio" class="form-label">Bio</label>
+                                <textarea 
+                                    id="bio" 
+                                    name="bio" 
+                                    class="form-textarea" 
+                                    rows="4"
+                                    placeholder="Tell others about yourself, your interests, and what you're passionate about..."
+                                    maxlength="1000"
+                                ><%= profile ? profile.bio : '' %></textarea>
+                                <div class="character-count">
+                                    <span id="bio-count">0</span> / 1000 characters
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="location" class="form-label">Location</label>
+                                    <input 
+                                        type="text" 
+                                        id="location" 
+                                        name="location" 
+                                        class="form-input" 
+                                        value="<%= profile ? profile.location : '' %>"
+                                        placeholder="City, Country"
+                                    >
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="timezone" class="form-label">Timezone</label>
+                                    <select id="timezone" name="timezone" class="form-select">
+                                        <option value="UTC" <%= profile && profile.timezone === 'UTC' ? 'selected' : '' %>>UTC</option>
+                                        <option value="America/New_York" <%= profile && profile.timezone === 'America/New_York' ? 'selected' : '' %>>Eastern Time</option>
+                                        <option value="America/Chicago" <%= profile && profile.timezone === 'America/Chicago' ? 'selected' : '' %>>Central Time</option>
+                                        <option value="America/Denver" <%= profile && profile.timezone === 'America/Denver' ? 'selected' : '' %>>Mountain Time</option>
+                                        <option value="America/Los_Angeles" <%= profile && profile.timezone === 'America/Los_Angeles' ? 'selected' : '' %>>Pacific Time</option>
+                                        <option value="Europe/London" <%= profile && profile.timezone === 'Europe/London' ? 'selected' : '' %>>London</option>
+                                        <option value="Europe/Paris" <%= profile && profile.timezone === 'Europe/Paris' ? 'selected' : '' %>>Paris</option>
+                                        <option value="Asia/Tokyo" <%= profile && profile.timezone === 'Asia/Tokyo' ? 'selected' : '' %>>Tokyo</option>
+                                        <option value="Asia/Shanghai" <%= profile && profile.timezone === 'Asia/Shanghai' ? 'selected' : '' %>>Shanghai</option>
+                                        <option value="Asia/Kolkata" <%= profile && profile.timezone === 'Asia/Kolkata' ? 'selected' : '' %>>India</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Professional Information -->
+                    <% if (profileUser.role === 'alumni' || profileUser.role === 'faculty') { %>
+                    <div class="form-section" id="professional-info">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <i class="fas fa-briefcase"></i>
+                                Professional Information
+                            </h2>
+                        </div>
+                        
+                        <div class="section-content">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="company" class="form-label">Company</label>
+                                    <input 
+                                        type="text" 
+                                        id="company" 
+                                        name="company" 
+                                        class="form-input" 
+                                        value="<%= profile ? profile.company : '' %>"
+                                        placeholder="Your current company"
+                                    >
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="position" class="form-label">Position</label>
+                                    <input 
+                                        type="text" 
+                                        id="position" 
+                                        name="position" 
+                                        class="form-input" 
+                                        value="<%= profile ? profile.position : '' %>"
+                                        placeholder="Your job title"
+                                    >
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="industry" class="form-label">Industry</label>
+                                    <input 
+                                        type="text" 
+                                        id="industry" 
+                                        name="industry" 
+                                        class="form-input" 
+                                        value="<%= profile ? profile.industry : '' %>"
+                                        placeholder="e.g., Technology, Healthcare, Finance"
+                                    >
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="experienceYears" class="form-label">Years of Experience</label>
+                                    <input 
+                                        type="number" 
+                                        id="experienceYears" 
+                                        name="experienceYears" 
+                                        class="form-input" 
+                                        value="<%= profile ? profile.experience_years : '' %>"
+                                        min="0"
+                                        max="50"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+                    
+                    <!-- Educational Information -->
+                    <% if (profileUser.role === 'student' || profileUser.role === 'alumni') { %>
+                    <div class="form-section" id="education-info">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <i class="fas fa-graduation-cap"></i>
+                                Education
+                            </h2>
+                        </div>
+                        
+                        <div class="section-content">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="university" class="form-label">University/Institution</label>
+                                    <input 
+                                        type="text" 
+                                        id="university" 
+                                        name="university" 
+                                        class="form-input" 
+                                        value="<%= profile ? profile.university : '' %>"
+                                        placeholder="Your university or institution"
+                                    >
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="major" class="form-label">Major/Field of Study</label>
+                                    <input 
+                                        type="text" 
+                                        id="major" 
+                                        name="major" 
+                                        class="form-input" 
+                                        value="<%= profile ? profile.major : '' %>"
+                                        placeholder="Your major or field of study"
+                                    >
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="degree" class="form-label">Degree</label>
+                                    <select id="degree" name="degree" class="form-select">
+                                        <option value="">Select degree</option>
+                                        <option value="bachelor" <%= profile && profile.degree === 'bachelor' ? 'selected' : '' %>>Bachelor's</option>
+                                        <option value="master" <%= profile && profile.degree === 'master' ? 'selected' : '' %>>Master's</option>
+                                        <option value="phd" <%= profile && profile.degree === 'phd' ? 'selected' : '' %>>PhD</option>
+                                        <option value="diploma" <%= profile && profile.degree === 'diploma' ? 'selected' : '' %>>Diploma</option>
+                                        <option value="certificate" <%= profile && profile.degree === 'certificate' ? 'selected' : '' %>>Certificate</option>
+                                        <option value="other" <%= profile && profile.degree === 'other' ? 'selected' : '' %>>Other</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="graduationYear" class="form-label">
+                                        <%= profileUser.role === 'student' ? 'Expected Graduation Year' : 'Graduation Year' %>
+                                    </label>
+                                    <input 
+                                        type="number" 
+                                        id="graduationYear" 
+                                        name="graduationYear" 
+                                        class="form-input" 
+                                        value="<%= profile ? profile.graduation_year : '' %>"
+                                        min="1970"
+                                        max="<%= new Date().getFullYear() + 10 %>"
+                                    >
+                                </div>
+                            </div>
+                            
+                            <% if (profileUser.role === 'student' || profileUser.role === 'alumni') { %>
+                            <div class="form-group">
+                                <label for="gpa" class="form-label">GPA (Optional)</label>
+                                <input 
+                                    type="number" 
+                                    id="gpa" 
+                                    name="gpa" 
+                                    class="form-input" 
+                                    value="<%= profile ? profile.gpa : '' %>"
+                                    min="0"
+                                    max="4"
+                                    step="0.01"
+                                    placeholder="e.g., 3.75"
+                                >
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                    <% } %>
+                    
+                    <!-- Contact Information -->
+                    <div class="form-section" id="contact-info">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <i class="fas fa-address-book"></i>
+                                Contact Information
+                            </h2>
+                        </div>
+                        
+                        <div class="section-content">
+                            <div class="form-group">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input 
+                                    type="tel" 
+                                    id="phone" 
+                                    name="phone" 
+                                    class="form-input" 
+                                    value="<%= profile ? profile.phone : '' %>"
+                                    placeholder="+1 (555) 123-4567"
+                                >
+                            </div>
+                            
+                            <div class="privacy-settings">
+                                <h4>Privacy Settings</h4>
+                                <div class="checkbox-group">
+                                    <label class="checkbox-label">
+                                        <input 
+                                            type="checkbox" 
+                                            name="showEmail" 
+                                            <%= profile && profile.show_email ? 'checked' : '' %>
+                                        >
+                                        <span class="checkbox-custom"></span>
+                                        Show email address to other users
+                                    </label>
+                                    
+                                    <label class="checkbox-label">
+                                        <input 
+                                            type="checkbox" 
+                                            name="showPhone" 
+                                            <%= profile && profile.show_phone ? 'checked' : '' %>
+                                        >
+                                        <span class="checkbox-custom"></span>
+                                        Show phone number to other users
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Social Links -->
+                    <div class="form-section" id="social-links">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <i class="fas fa-share-alt"></i>
+                                Social Links
+                            </h2>
+                        </div>
+                        
+                        <div class="section-content">
+                            <div class="form-group">
+                                <label for="linkedinUrl" class="form-label">
+                                    <i class="fab fa-linkedin"></i>
+                                    LinkedIn Profile
+                                </label>
+                                <input 
+                                    type="url" 
+                                    id="linkedinUrl" 
+                                    name="linkedinUrl" 
+                                    class="form-input" 
+                                    value="<%= profile ? profile.linkedin_url : '' %>"
+                                    placeholder="https://linkedin.com/in/yourprofile"
+                                >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="githubUrl" class="form-label">
+                                    <i class="fab fa-github"></i>
+                                    GitHub Profile
+                                </label>
+                                <input 
+                                    type="url" 
+                                    id="githubUrl" 
+                                    name="githubUrl" 
+                                    class="form-input" 
+                                    value="<%= profile ? profile.github_url : '' %>"
+                                    placeholder="https://github.com/yourusername"
+                                >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="twitterUrl" class="form-label">
+                                    <i class="fab fa-twitter"></i>
+                                    Twitter Profile
+                                </label>
+                                <input 
+                                    type="url" 
+                                    id="twitterUrl" 
+                                    name="twitterUrl" 
+                                    class="form-input" 
+                                    value="<%= profile ? profile.twitter_url : '' %>"
+                                    placeholder="https://twitter.com/yourusername"
+                                >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="websiteUrl" class="form-label">
+                                    <i class="fas fa-globe"></i>
+                                    Personal Website
+                                </label>
+                                <input 
+                                    type="url" 
+                                    id="websiteUrl" 
+                                    name="websiteUrl" 
+                                    class="form-input" 
+                                    value="<%= profile ? profile.website_url : '' %>"
+                                    placeholder="https://yourwebsite.com"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Skills & Interests -->
+                    <div class="form-section" id="skills-interests">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <i class="fas fa-lightbulb"></i>
+                                Skills & Interests
+                            </h2>
+                        </div>
+                        
+                        <div class="section-content">
+                            <div class="form-group">
+                                <label for="skills" class="form-label">Skills</label>
+                                <input 
+                                    type="text" 
+                                    id="skills" 
+                                    name="skills" 
+                                    class="form-input" 
+                                    value="<%= profile && profile.skills ? profile.skills.join(', ') : '' %>"
+                                    placeholder="JavaScript, Python, Project Management, etc. (comma-separated)"
+                                >
+                                <div class="form-help">
+                                    Enter your skills separated by commas. These help others find you based on your expertise.
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="interests" class="form-label">Interests</label>
+                                <input 
+                                    type="text" 
+                                    id="interests" 
+                                    name="interests" 
+                                    class="form-input" 
+                                    value="<%= profile && profile.interests ? profile.interests.join(', ') : '' %>"
+                                    placeholder="Machine Learning, Startups, Photography, etc. (comma-separated)"
+                                >
+                                <div class="form-help">
+                                    Share your interests to connect with like-minded people.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Preferences -->
+                    <div class="form-section" id="preferences">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <i class="fas fa-cog"></i>
+                                Preferences
+                            </h2>
+                        </div>
+                        
+                        <div class="section-content">
+                            <div class="form-group">
+                                <label for="profileVisibility" class="form-label">Profile Visibility</label>
+                                <select id="profileVisibility" name="profileVisibility" class="form-select">
+                                    <option value="public" <%= profile && profile.profile_visibility === 'public' ? 'selected' : '' %>>
+                                        Public - Anyone can view your profile
+                                    </option>
+                                    <option value="alumni_only" <%= !profile || profile.profile_visibility === 'alumni_only' ? 'selected' : '' %>>
+                                        Alumni Only - Only alumni and faculty can view
+                                    </option>
+                                    <option value="private" <%= profile && profile.profile_visibility === 'private' ? 'selected' : '' %>>
+                                        Private - Only you can view your profile
+                                    </option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="preferredContactMethod" class="form-label">Preferred Contact Method</label>
+                                <select id="preferredContactMethod" name="preferredContactMethod" class="form-select">
+                                    <option value="platform" <%= !profile || profile.preferred_contact_method === 'platform' ? 'selected' : '' %>>
+                                        Platform Messages
+                                    </option>
+                                    <option value="email" <%= profile && profile.preferred_contact_method === 'email' ? 'selected' : '' %>>
+                                        Email
+                                    </option>
+                                    <option value="phone" <%= profile && profile.preferred_contact_method === 'phone' ? 'selected' : '' %>>
+                                        Phone
+                                    </option>
+                                    <option value="linkedin" <%= profile && profile.preferred_contact_method === 'linkedin' ? 'selected' : '' %>>
+                                        LinkedIn
+                                    </option>
+                                </select>
+                            </div>
+                            
+                            <div class="mentorship-settings">
+                                <h4>Mentorship</h4>
+                                <div class="checkbox-group">
+                                    <label class="checkbox-label">
+                                        <input 
+                                            type="checkbox" 
+                                            name="isMentor" 
+                                            <%= profile && profile.is_mentor ? 'checked' : '' %>
+                                        >
+                                        <span class="checkbox-custom"></span>
+                                        I'm available as a mentor
+                                    </label>
+                                    
+                                    <label class="checkbox-label">
+                                        <input 
+                                            type="checkbox" 
+                                            name="isSeekingMentor" 
+                                            <%= profile && profile.is_seeking_mentor ? 'checked' : '' %>
+                                        >
+                                        <span class="checkbox-custom"></span>
+                                        I'm seeking mentorship
+                                    </label>
+                                    
+                                    <label class="checkbox-label">
+                                        <input 
+                                            type="checkbox" 
+                                            name="isOpenToOpportunities" 
+                                            <%= !profile || profile.is_open_to_opportunities ? 'checked' : '' %>
+                                        >
+                                        <span class="checkbox-custom"></span>
+                                        I'm open to new opportunities
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-large" id="save-btn">
+                        <i class="fas fa-save"></i>
+                        Save Changes
+                    </button>
+                    
+                    <a href="/profile" class="btn btn-outline btn-large">
+                        <i class="fas fa-times"></i>
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('profile-form');
+    const saveBtn = document.getElementById('save-btn');
+    const bioTextarea = document.getElementById('bio');
+    const bioCount = document.getElementById('bio-count');
+    const originalBtnText = saveBtn.innerHTML;
+    
+    // Character count for bio
+    function updateBioCount() {
+        const count = bioTextarea.value.length;
+        bioCount.textContent = count;
+        
+        if (count > 1000) {
+            bioCount.style.color = 'var(--error-color)';
+            bioTextarea.value = bioTextarea.value.substring(0, 1000);
+            bioCount.textContent = '1000';
+        } else {
+            bioCount.style.color = 'var(--text-secondary)';
+        }
+    }
+    
+    bioTextarea.addEventListener('input', updateBioCount);
+    updateBioCount(); // Initial count
+    
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        // Show loading state
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        
+        // Re-enable button after 10 seconds as fallback
+        setTimeout(() => {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalBtnText;
+        }, 10000);
+    });
+    
+    // Smooth scroll to sections from URL hash
+    if (window.location.hash) {
+        const targetSection = document.querySelector(window.location.hash);
+        if (targetSection) {
+            setTimeout(() => {
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+    }
+});
+</script>
+
+<style>
+.profile-edit-page {
+    padding: 2rem 0;
+    background: var(--background-secondary);
+    min-height: calc(100vh - 80px);
+}
+
+.edit-layout {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.edit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+}
+
+.header-content h1 {
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.page-description {
+    color: var(--text-secondary);
+    font-size: var(--text-lg);
+    margin: 0;
+}
+
+.profile-form {
+    background: var(--background-card);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+.form-section {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-section:last-child {
+    border-bottom: none;
+}
+
+.section-header {
+    padding: 1.5rem 2rem;
+    background: var(--background-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.section-title i {
+    color: var(--primary-color);
+}
+
+.section-content {
+    padding: 2rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-size: var(--text-sm);
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: var(--text-base);
+    transition: all var(--transition-fast);
+    background: var(--background-primary);
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.character-count {
+    text-align: right;
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+}
+
+.form-help {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    line-height: var(--leading-relaxed);
+}
+
+.privacy-settings,
+.mentorship-settings {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.privacy-settings h4,
+.mentorship-settings h4 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: var(--text-base);
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+.checkbox-label input[type="checkbox"] {
+    display: none;
+}
+
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    position: relative;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkbox-custom {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkbox-custom::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.form-actions {
+    padding: 2rem;
+    background: var(--background-secondary);
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+    .edit-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    .header-actions {
+        align-self: flex-start;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .section-content {
+        padding: 1.5rem;
+    }
+    
+    .form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+    
+    .form-actions .btn {
+        width: 100%;
+    }
+}
+</style>

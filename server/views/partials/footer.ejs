@@ -1,0 +1,130 @@
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-content">
+            <!-- Brand Section -->
+            <div class="footer-section">
+                <div class="footer-brand">
+                    <img src="/images/logo.svg" alt="Sangam Logo" class="footer-logo">
+                    <h3>Sangam Alumni Network</h3>
+                    <p>Connecting alumni and students for professional growth and networking.</p>
+                </div>
+                
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Quick Links -->
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <% if (!isAuthenticated) { %>
+                        <li><a href="/auth/register">Join Network</a></li>
+                        <li><a href="/auth/login">Login</a></li>
+                    <% } else { %>
+                        <li><a href="/profile">My Profile</a></li>
+                        <li><a href="/chat">Messages</a></li>
+                    <% } %>
+                </ul>
+            </div>
+            
+            <!-- Features -->
+            <div class="footer-section">
+                <h4>Features</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Alumni Directory</a></li>
+                    <li><a href="#">Mentorship Program</a></li>
+                    <li><a href="#">Career Opportunities</a></li>
+                    <li><a href="#">Networking Events</a></li>
+                    <li><a href="#">Professional Development</a></li>
+                </ul>
+            </div>
+            
+            <!-- Support -->
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul class="footer-links">
+                    <li><a href="/help">Help Center</a></li>
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                    <li><a href="/terms">Terms of Service</a></li>
+                    <li><a href="/contact">Contact Support</a></li>
+                    <li><a href="/feedback">Send Feedback</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <p>&copy; <%= new Date().getFullYear() %> Sangam Alumni Network. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="/privacy">Privacy</a>
+                    <span class="separator">|</span>
+                    <a href="/terms">Terms</a>
+                    <span class="separator">|</span>
+                    <a href="/cookies">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+// Footer functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Smooth scroll for footer links
+    const footerLinks = document.querySelectorAll('.footer-links a[href^="#"]');
+    footerLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+    
+    // Back to top functionality
+    const backToTopBtn = document.createElement('button');
+    backToTopBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
+    backToTopBtn.className = 'back-to-top';
+    backToTopBtn.setAttribute('aria-label', 'Back to top');
+    document.body.appendChild(backToTopBtn);
+    
+    // Show/hide back to top button
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
+    });
+    
+    // Back to top click handler
+    backToTopBtn.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+});
+</script>

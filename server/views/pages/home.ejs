@@ -1,0 +1,357 @@
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-background">
+        <div class="hero-overlay"></div>
+    </div>
+    
+    <div class="hero-content">
+        <div class="container">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    Connect with Your
+                    <span class="gradient-text">Alumni Network</span>
+                </h1>
+                
+                <p class="hero-description">
+                    Join thousands of alumni and students building meaningful professional relationships, 
+                    sharing opportunities, and growing together in the Sangam community.
+                </p>
+                
+                <div class="hero-actions">
+                    <% if (!isAuthenticated) { %>
+                        <a href="/auth/register" class="btn btn-primary btn-large">
+                            <i class="fas fa-user-plus"></i>
+                            Join Network
+                        </a>
+                        
+                        <a href="/auth/login" class="btn btn-outline btn-large">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login
+                        </a>
+                    <% } else { %>
+                        <a href="/profile" class="btn btn-primary btn-large">
+                            <i class="fas fa-user"></i>
+                            View Profile
+                        </a>
+                        
+                        <a href="/chat" class="btn btn-outline btn-large">
+                            <i class="fas fa-comments"></i>
+                            Start Chatting
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">5,000+</div>
+                    <div class="stat-label">Alumni Members</div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-number">2,500+</div>
+                    <div class="stat-label">Current Students</div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-number">150+</div>
+                    <div class="stat-label">Companies</div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Countries</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Why Choose Sangam?</h2>
+            <p class="section-description">
+                Discover the features that make our alumni network the best platform for professional growth
+            </p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="feature-title">Professional Networking</h3>
+                <p class="feature-description">
+                    Connect with alumni across industries and build meaningful professional relationships
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3 class="feature-title">Mentorship Program</h3>
+                <p class="feature-description">
+                    Get guidance from experienced alumni or mentor current students in your field
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <h3 class="feature-title">Career Opportunities</h3>
+                <p class="feature-description">
+                    Discover job openings, internships, and career advancement opportunities
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3 class="feature-title">Real-time Chat</h3>
+                <p class="feature-description">
+                    Instant messaging with alumni and students for quick communication
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <h3 class="feature-title">Events & Meetups</h3>
+                <p class="feature-description">
+                    Join alumni events, workshops, and networking meetups in your area
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <h3 class="feature-title">Global Community</h3>
+                <p class="feature-description">
+                    Connect with alumni worldwide and expand your international network
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-description">
+                Get started with Sangam in just a few simple steps
+            </p>
+        </div>
+        
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3 class="step-title">Create Your Profile</h3>
+                    <p class="step-description">
+                        Sign up and create a comprehensive profile showcasing your education, 
+                        experience, and interests
+                    </p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3 class="step-title">Discover Alumni</h3>
+                    <p class="step-description">
+                        Browse through our extensive alumni directory and find professionals 
+                        in your field of interest
+                    </p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3 class="step-title">Start Connecting</h3>
+                    <p class="step-description">
+                        Send messages, join conversations, and build meaningful professional 
+                        relationships
+                    </p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3 class="step-title">Grow Together</h3>
+                    <p class="step-description">
+                        Participate in mentorship programs, attend events, and advance your 
+                        career together
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">What Our Members Say</h2>
+            <p class="section-description">
+                Hear from alumni and students who have benefited from our network
+            </p>
+        </div>
+        
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p class="testimonial-text">
+                        "Sangam helped me connect with alumni in my field and land my dream job. 
+                        The mentorship program was invaluable for my career growth."
+                    </p>
+                </div>
+                <div class="testimonial-author">
+                    <img src="/images/testimonial-1.svg" alt="Sarah Johnson" class="author-avatar">
+                    <div class="author-info">
+                        <h4 class="author-name">Sarah Johnson</h4>
+                        <p class="author-title">Software Engineer at Google</p>
+                        <p class="author-class">Class of 2020</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p class="testimonial-text">
+                        "As an alumnus, I love being able to give back by mentoring current students. 
+                        The platform makes it easy to stay connected with my alma mater."
+                    </p>
+                </div>
+                <div class="testimonial-author">
+                    <img src="/images/testimonial-2.svg" alt="Michael Chen" class="author-avatar">
+                    <div class="author-info">
+                        <h4 class="author-name">Michael Chen</h4>
+                        <p class="author-title">Product Manager at Microsoft</p>
+                        <p class="author-class">Class of 2015</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p class="testimonial-text">
+                        "The networking opportunities through Sangam are incredible. I've made 
+                        connections that have opened doors I never knew existed."
+                    </p>
+                </div>
+                <div class="testimonial-author">
+                    <img src="/images/testimonial-3.svg" alt="Priya Patel" class="author-avatar">
+                    <div class="author-info">
+                        <h4 class="author-name">Priya Patel</h4>
+                        <p class="author-title">Marketing Director at Spotify</p>
+                        <p class="author-class">Class of 2018</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta">
+    <div class="container">
+        <div class="cta-content">
+            <h2 class="cta-title">Ready to Join Our Community?</h2>
+            <p class="cta-description">
+                Start building meaningful connections with alumni and students today
+            </p>
+            
+            <% if (!isAuthenticated) { %>
+                <div class="cta-actions">
+                    <a href="/auth/register" class="btn btn-primary btn-large">
+                        <i class="fas fa-rocket"></i>
+                        Get Started Now
+                    </a>
+                    
+                    <a href="/about" class="btn btn-outline btn-large">
+                        <i class="fas fa-info-circle"></i>
+                        Learn More
+                    </a>
+                </div>
+            <% } else { %>
+                <div class="cta-actions">
+                    <a href="/chat" class="btn btn-primary btn-large">
+                        <i class="fas fa-comments"></i>
+                        Start Networking
+                    </a>
+                    
+                    <a href="/profile" class="btn btn-outline btn-large">
+                        <i class="fas fa-user-edit"></i>
+                        Complete Profile
+                    </a>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</section>
+
+<script>
+// Homepage specific functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Animate stats on scroll
+    const stats = document.querySelectorAll('.stat-number');
+    const animateStats = () => {
+        stats.forEach(stat => {
+            const rect = stat.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                const finalValue = parseInt(stat.textContent.replace(/[^0-9]/g, ''));
+                animateNumber(stat, 0, finalValue, 2000);
+            }
+        });
+    };
+    
+    // Number animation function
+    function animateNumber(element, start, end, duration) {
+        if (element.dataset.animated) return;
+        element.dataset.animated = 'true';
+        
+        const startTime = performance.now();
+        const update = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const current = Math.floor(start + (end - start) * progress);
+            
+            element.textContent = current.toLocaleString() + '+';
+            
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            }
+        };
+        
+        requestAnimationFrame(update);
+    }
+    
+    // Trigger animation on scroll
+    window.addEventListener('scroll', animateStats);
+    animateStats(); // Check on load
+    
+    // Smooth scroll for CTA buttons
+    const ctaButtons = document.querySelectorAll('.cta-actions .btn');
+    ctaButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            // Add click animation
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
+        });
+    });
+});
+</script>

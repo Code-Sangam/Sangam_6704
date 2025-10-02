@@ -1,0 +1,360 @@
+<%- contentFor('styles') %>
+<link rel="stylesheet" href="/css/dashboard.css">
+
+<%- contentFor('scripts') %>
+<script src="/js/dashboard.js"></script>
+<script>
+  // Make current user available to JavaScript
+  window.currentUser = <%- JSON.stringify(user) %>;
+</script>
+
+<div class="dashboard-container">
+  <!-- Dashboard Header -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <div class="welcome-section">
+        <h1>Welcome back, <%= user.profile?.firstName || user.email.split('@')[0] %>!</h1>
+        <p class="welcome-subtitle">
+          <% if (user.role === 'student') { %>
+            Continue your learning journey and connect with alumni
+          <% } else if (user.role === 'alumni') { %>
+            Share your experience and mentor the next generation
+          <% } else if (user.role === 'faculty') { %>
+            Guide students and collaborate with fellow educators
+          <% } %>
+        </p>
+      </div>
+      
+      <div class="header-actions">
+        <button class="btn btn-primary" id="quickActionBtn">
+          <% if (user.role === 'student') { %>
+            <i class="icon-search"></i>
+            Find Mentors
+          <% } else if (user.role === 'alumni') { %>
+            <i class="icon-users"></i>
+            View Students
+          <% } else { %>
+            <i class="icon-book"></i>
+            Manage Courses
+          <% } %>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div class="dashboard-content">
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <% if (user.role === 'student') { %>
+        <!-- Student Stats -->
+        <div class="stat-card">
+          <div class="stat-icon student">
+            <i class="icon-users"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="connectionsCount">0</h3>
+            <p>Alumni Connections</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon student">
+            <i class="icon-message-circle"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="messagesCount">0</h3>
+            <p>Messages Exchanged</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon student">
+            <i class="icon-calendar"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="eventsCount">0</h3>
+            <p>Events Attended</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon student">
+            <i class="icon-award"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="skillsCount">0</h3>
+            <p>Skills Developed</p>
+          </div>
+        </div>
+      <% } else if (user.role === 'alumni') { %>
+        <!-- Alumni Stats -->
+        <div class="stat-card">
+          <div class="stat-icon alumni">
+            <i class="icon-users"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="menteesCount">0</h3>
+            <p>Students Mentored</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon alumni">
+            <i class="icon-star"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="ratingScore">0.0</h3>
+            <p>Mentor Rating</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon alumni">
+            <i class="icon-clock"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="hoursCount">0</h3>
+            <p>Mentoring Hours</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon alumni">
+            <i class="icon-briefcase"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="experienceYears">0</h3>
+            <p>Years Experience</p>
+          </div>
+        </div>
+      <% } else { %>
+        <!-- Faculty Stats -->
+        <div class="stat-card">
+          <div class="stat-icon faculty">
+            <i class="icon-users"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="studentsCount">0</h3>
+            <p>Students Guided</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon faculty">
+            <i class="icon-book"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="coursesCount">0</h3>
+            <p>Courses Taught</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon faculty">
+            <i class="icon-file-text"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="publicationsCount">0</h3>
+            <p>Publications</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon faculty">
+            <i class="icon-award"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="achievementsCount">0</h3>
+            <p>Achievements</p>
+          </div>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Main Dashboard Grid -->
+    <div class="dashboard-grid">
+      <!-- Left Column -->
+      <div class="dashboard-left">
+        <!-- Recent Activity -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2>
+              <i class="icon-activity"></i>
+              Recent Activity
+            </h2>
+            <button class="btn btn-ghost btn-sm" onclick="refreshActivity()">
+              <i class="icon-refresh"></i>
+            </button>
+          </div>
+          <div class="card-content">
+            <div class="activity-list" id="activityList">
+              <div class="loading">Loading recent activity...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2>
+              <i class="icon-zap"></i>
+              Quick Actions
+            </h2>
+          </div>
+          <div class="card-content">
+            <div class="quick-actions">
+              <% if (user.role === 'student') { %>
+                <a href="/chat" class="quick-action">
+                  <i class="icon-message-circle"></i>
+                  <span>Start Chat</span>
+                </a>
+                <a href="/profile" class="quick-action">
+                  <i class="icon-user"></i>
+                  <span>Update Profile</span>
+                </a>
+                <a href="/search" class="quick-action">
+                  <i class="icon-search"></i>
+                  <span>Find Alumni</span>
+                </a>
+                <a href="/events" class="quick-action">
+                  <i class="icon-calendar"></i>
+                  <span>Browse Events</span>
+                </a>
+              <% } else if (user.role === 'alumni') { %>
+                <a href="/chat" class="quick-action">
+                  <i class="icon-message-circle"></i>
+                  <span>Message Students</span>
+                </a>
+                <a href="/mentoring" class="quick-action">
+                  <i class="icon-users"></i>
+                  <span>Mentoring Hub</span>
+                </a>
+                <a href="/profile" class="quick-action">
+                  <i class="icon-briefcase"></i>
+                  <span>Update Experience</span>
+                </a>
+                <a href="/events/create" class="quick-action">
+                  <i class="icon-plus"></i>
+                  <span>Create Event</span>
+                </a>
+              <% } else { %>
+                <a href="/courses" class="quick-action">
+                  <i class="icon-book"></i>
+                  <span>Manage Courses</span>
+                </a>
+                <a href="/students" class="quick-action">
+                  <i class="icon-users"></i>
+                  <span>View Students</span>
+                </a>
+                <a href="/research" class="quick-action">
+                  <i class="icon-file-text"></i>
+                  <span>Research Hub</span>
+                </a>
+                <a href="/announcements" class="quick-action">
+                  <i class="icon-megaphone"></i>
+                  <span>Announcements</span>
+                </a>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="dashboard-right">
+        <!-- Profile Summary -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2>
+              <i class="icon-user"></i>
+              Profile Summary
+            </h2>
+            <a href="/profile" class="btn btn-ghost btn-sm">
+              <i class="icon-edit"></i>
+            </a>
+          </div>
+          <div class="card-content">
+            <div class="profile-summary">
+              <div class="profile-avatar">
+                <img src="<%= user.profile?.profilePicture || '/images/default-avatar.png' %>" alt="Profile Picture">
+                <div class="profile-status online"></div>
+              </div>
+              <div class="profile-info">
+                <h3><%= user.profile?.firstName || 'User' %> <%= user.profile?.lastName || '' %></h3>
+                <p class="profile-role"><%= user.role.charAt(0).toUpperCase() + user.role.slice(1) %></p>
+                <% if (user.profile?.company) { %>
+                  <p class="profile-company">
+                    <i class="icon-briefcase"></i>
+                    <%= user.profile.company %>
+                  </p>
+                <% } %>
+                <% if (user.profile?.university) { %>
+                  <p class="profile-university">
+                    <i class="icon-graduation-cap"></i>
+                    <%= user.profile.university %>
+                  </p>
+                <% } %>
+              </div>
+            </div>
+            
+            <div class="profile-completion">
+              <div class="completion-header">
+                <span>Profile Completion</span>
+                <span id="completionPercentage">0%</span>
+              </div>
+              <div class="completion-bar">
+                <div class="completion-progress" id="completionProgress"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Connections/Network -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2>
+              <i class="icon-users"></i>
+              <% if (user.role === 'student') { %>
+                Your Network
+              <% } else if (user.role === 'alumni') { %>
+                Your Mentees
+              <% } else { %>
+                Your Students
+              <% } %>
+            </h2>
+            <a href="/network" class="btn btn-ghost btn-sm">
+              <i class="icon-external-link"></i>
+            </a>
+          </div>
+          <div class="card-content">
+            <div class="connections-list" id="connectionsList">
+              <div class="loading">Loading connections...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upcoming Events -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2>
+              <i class="icon-calendar"></i>
+              Upcoming Events
+            </h2>
+            <a href="/events" class="btn btn-ghost btn-sm">
+              <i class="icon-external-link"></i>
+            </a>
+          </div>
+          <div class="card-content">
+            <div class="events-list" id="eventsList">
+              <div class="loading">Loading events...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modals and Overlays -->
+<div id="modalContainer" class="modal-container"></div>

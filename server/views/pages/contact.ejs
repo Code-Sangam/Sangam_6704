@@ -1,0 +1,919 @@
+<!-- Contact Page -->
+<section class="contact-hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">Get in Touch</h1>
+            <p class="hero-description">
+                Have questions, suggestions, or need support? We'd love to hear from you.
+                Our team is here to help you make the most of your Sangam experience.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Form Section -->
+<section class="contact-form-section">
+    <div class="container">
+        <div class="contact-grid">
+            <div class="contact-info">
+                <h2 class="info-title">Let's Connect</h2>
+                <p class="info-description">
+                    Whether you're a current member looking for support or someone interested 
+                    in joining our community, we're here to help.
+                </p>
+                
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <div class="method-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="method-info">
+                            <h3 class="method-title">Email Us</h3>
+                            <p class="method-text">support@sangamalumni.com</p>
+                            <p class="method-note">We typically respond within 24 hours</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <div class="method-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="method-info">
+                            <h3 class="method-title">Call Us</h3>
+                            <p class="method-text">+1 (555) 123-4567</p>
+                            <p class="method-note">Mon-Fri, 9 AM - 6 PM EST</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <div class="method-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="method-info">
+                            <h3 class="method-title">Visit Us</h3>
+                            <p class="method-text">
+                                123 Alumni Drive<br>
+                                University City, CA 90210
+                            </p>
+                            <p class="method-note">By appointment only</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <div class="method-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="method-info">
+                            <h3 class="method-title">Live Chat</h3>
+                            <p class="method-text">Available on our platform</p>
+                            <p class="method-note">
+                                <% if (isAuthenticated) { %>
+                                    <a href="/chat" class="chat-link">Start chatting now</a>
+                                <% } else { %>
+                                    <a href="/auth/login" class="chat-link">Login to chat</a>
+                                <% } %>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="social-links">
+                    <h3 class="social-title">Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-form-container">
+                <form class="contact-form" id="contact-form" action="/contact" method="POST">
+                    <div class="form-header">
+                        <h2 class="form-title">Send us a Message</h2>
+                        <p class="form-description">
+                            Fill out the form below and we'll get back to you as soon as possible.
+                        </p>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName" class="form-label">First Name *</label>
+                            <input 
+                                type="text" 
+                                id="firstName" 
+                                name="firstName" 
+                                class="form-input" 
+                                value="<%= isAuthenticated ? user.firstName || '' : '' %>"
+                                placeholder="Enter your first name"
+                                required
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="lastName" class="form-label">Last Name *</label>
+                            <input 
+                                type="text" 
+                                id="lastName" 
+                                name="lastName" 
+                                class="form-input" 
+                                value="<%= isAuthenticated ? user.lastName || '' : '' %>"
+                                placeholder="Enter your last name"
+                                required
+                            >
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address *</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            class="form-input" 
+                            value="<%= isAuthenticated ? user.email || '' : '' %>"
+                            placeholder="Enter your email address"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject" class="form-label">Subject *</label>
+                        <select id="subject" name="subject" class="form-select" required>
+                            <option value="">Select a subject</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="technical">Technical Support</option>
+                            <option value="account">Account Issues</option>
+                            <option value="feature">Feature Request</option>
+                            <option value="partnership">Partnership Opportunity</option>
+                            <option value="feedback">Feedback</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message" class="form-label">Message *</label>
+                        <textarea 
+                            id="message" 
+                            name="message" 
+                            class="form-textarea" 
+                            rows="6"
+                            placeholder="Tell us how we can help you..."
+                            required
+                        ></textarea>
+                        <div class="character-count">
+                            <span id="char-count">0</span> / 1000 characters
+                        </div>
+                    </div>
+                    
+                    <% if (!isAuthenticated) { %>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="newsletter" id="newsletter">
+                            <span class="checkbox-custom"></span>
+                            I'd like to receive updates about Sangam Alumni Network
+                        </label>
+                    </div>
+                    <% } %>
+                    
+                    <button type="submit" class="btn btn-primary btn-full" id="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <p class="section-description">
+                Quick answers to common questions about Sangam Alumni Network
+            </p>
+        </div>
+        
+        <div class="faq-grid">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How do I join the Sangam Alumni Network?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>
+                        Joining is simple! Click the "Register" button and fill out the registration form. 
+                        You'll need to provide your basic information and select whether you're a current 
+                        student, alumni, or faculty member. Once registered, you can complete your profile 
+                        and start connecting with others.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Is Sangam Alumni Network free to use?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>
+                        Yes! Sangam Alumni Network is completely free to join and use. All core features 
+                        including messaging, profile creation, and networking are available at no cost. 
+                        We believe in making professional networking accessible to everyone in our community.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How do I find mentors or mentees?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>
+                        You can browse profiles by role, industry, or graduation year. Use our search 
+                        and filter features to find people with relevant experience or interests. 
+                        Many members indicate their mentorship availability in their profiles, making 
+                        it easy to identify potential mentors or mentees.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Can I control who sees my profile information?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>
+                        Absolutely! We provide comprehensive privacy controls. You can set your profile 
+                        visibility to public, alumni-only, or private. You can also control which 
+                        specific information (like email or phone) is visible to other members. 
+                        Your privacy and security are our top priorities.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How do I report inappropriate behavior?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>
+                        If you encounter any inappropriate behavior, please report it immediately 
+                        through our reporting system or contact us directly. We take all reports 
+                        seriously and have a zero-tolerance policy for harassment, spam, or 
+                        unprofessional conduct.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Can I delete my account if I no longer want to use the platform?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>
+                        Yes, you can delete your account at any time from your account settings. 
+                        When you delete your account, all your personal information will be removed 
+                        from our systems. However, please note that messages you've sent to others 
+                        may remain visible to maintain conversation context.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('contact-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const messageTextarea = document.getElementById('message');
+    const charCount = document.getElementById('char-count');
+    const originalBtnText = submitBtn.innerHTML;
+    
+    // Character count for message
+    messageTextarea.addEventListener('input', function() {
+        const count = this.value.length;
+        charCount.textContent = count;
+        
+        if (count > 1000) {
+            charCount.style.color = 'var(--error-color)';
+            this.value = this.value.substring(0, 1000);
+            charCount.textContent = '1000';
+        } else {
+            charCount.style.color = 'var(--text-secondary)';
+        }
+    });
+    
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validate form
+        if (!validateContactForm()) {
+            return;
+        }
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        
+        // Simulate form submission (replace with actual submission)
+        setTimeout(() => {
+            // Show success message
+            showSuccessMessage();
+            
+            // Reset form
+            form.reset();
+            charCount.textContent = '0';
+            
+            // Reset button
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+        }, 2000);
+    });
+    
+    // Form validation
+    const inputs = form.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            validateField(this);
+        });
+        
+        input.addEventListener('input', function() {
+            clearFieldError(this);
+        });
+    });
+});
+
+function validateContactForm() {
+    const requiredFields = ['firstName', 'lastName', 'email', 'subject', 'message'];
+    let isValid = true;
+    
+    requiredFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (!validateField(field)) {
+            isValid = false;
+        }
+    });
+    
+    return isValid;
+}
+
+function validateField(field) {
+    const value = field.value.trim();
+    const fieldId = field.id;
+    
+    clearFieldError(field);
+    
+    if (field.hasAttribute('required') && !value) {
+        showFieldError(field, `${getFieldLabel(fieldId)} is required`);
+        return false;
+    }
+    
+    if (fieldId === 'email' && value) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+            showFieldError(field, 'Please enter a valid email address');
+            return false;
+        }
+    }
+    
+    if (fieldId === 'message' && value.length > 1000) {
+        showFieldError(field, 'Message must be 1000 characters or less');
+        return false;
+    }
+    
+    return true;
+}
+
+function showFieldError(field, message) {
+    field.classList.add('error');
+    
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'field-error';
+    errorDiv.textContent = message;
+    
+    field.parentElement.appendChild(errorDiv);
+}
+
+function clearFieldError(field) {
+    field.classList.remove('error');
+    
+    const existingError = field.parentElement.querySelector('.field-error');
+    if (existingError) {
+        existingError.remove();
+    }
+}
+
+function getFieldLabel(fieldId) {
+    const labels = {
+        firstName: 'First Name',
+        lastName: 'Last Name',
+        email: 'Email',
+        subject: 'Subject',
+        message: 'Message'
+    };
+    
+    return labels[fieldId] || 'Field';
+}
+
+function showSuccessMessage() {
+    const successDiv = document.createElement('div');
+    successDiv.className = 'success-message';
+    successDiv.innerHTML = `
+        <div class="success-content">
+            <i class="fas fa-check-circle"></i>
+            <h3>Message Sent Successfully!</h3>
+            <p>Thank you for contacting us. We'll get back to you within 24 hours.</p>
+        </div>
+    `;
+    
+    document.body.appendChild(successDiv);
+    
+    setTimeout(() => {
+        successDiv.remove();
+    }, 5000);
+}
+
+function toggleFAQ(button) {
+    const faqItem = button.parentElement;
+    const answer = faqItem.querySelector('.faq-answer');
+    const icon = button.querySelector('i');
+    
+    const isOpen = faqItem.classList.contains('active');
+    
+    // Close all other FAQ items
+    document.querySelectorAll('.faq-item').forEach(item => {
+        item.classList.remove('active');
+        item.querySelector('i').style.transform = 'rotate(0deg)';
+    });
+    
+    // Toggle current item
+    if (!isOpen) {
+        faqItem.classList.add('active');
+        icon.style.transform = 'rotate(180deg)';
+    }
+}
+</script>
+
+<style>
+.contact-hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    color: white;
+    padding: 6rem 0 4rem;
+    text-align: center;
+}
+
+.hero-title {
+    font-size: var(--text-5xl);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: white;
+}
+
+.hero-description {
+    font-size: var(--text-xl);
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: var(--leading-relaxed);
+    opacity: 0.95;
+}
+
+.contact-form-section {
+    padding: 5rem 0;
+    background: var(--background-primary);
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.info-title {
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.info-description {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+    line-height: var(--leading-relaxed);
+}
+
+.contact-methods {
+    margin-bottom: 3rem;
+}
+
+.contact-method {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    background: var(--background-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+}
+
+.method-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: var(--text-xl);
+    flex-shrink: 0;
+}
+
+.method-title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.method-text {
+    color: var(--text-primary);
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.method-note {
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+}
+
+.chat-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.chat-link:hover {
+    text-decoration: underline;
+}
+
+.social-links {
+    padding: 2rem;
+    background: var(--background-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.social-title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.social-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--background-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+    border: 1px solid var(--border-color);
+}
+
+.social-icon:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    border-color: var(--primary-color);
+}
+
+.contact-form-container {
+    background: var(--background-card);
+    padding: 3rem;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
+}
+
+.form-header {
+    margin-bottom: 2rem;
+}
+
+.form-title {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.form-description {
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-size: var(--text-sm);
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: var(--text-base);
+    transition: all var(--transition-fast);
+    background: var(--background-primary);
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-input.error,
+.form-select.error,
+.form-textarea.error {
+    border-color: var(--error-color);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.character-count {
+    text-align: right;
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+.checkbox-label input[type="checkbox"] {
+    display: none;
+}
+
+.checkbox-custom {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    position: relative;
+    transition: all var(--transition-fast);
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkbox-custom {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkbox-custom::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.btn-full {
+    width: 100%;
+    padding: 1rem;
+    font-size: var(--text-lg);
+    font-weight: 600;
+}
+
+.faq-section {
+    padding: 5rem 0;
+    background: var(--background-secondary);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.section-title {
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.section-description {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.faq-grid {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    background: var(--background-card);
+    border-radius: var(--radius-lg);
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.faq-question {
+    width: 100%;
+    padding: 1.5rem 2rem;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all var(--transition-fast);
+}
+
+.faq-question:hover {
+    background: var(--background-secondary);
+}
+
+.faq-question i {
+    color: var(--primary-color);
+    transition: transform var(--transition-fast);
+}
+
+.faq-answer {
+    padding: 0 2rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: all var(--transition-normal);
+}
+
+.faq-item.active .faq-answer {
+    padding: 0 2rem 1.5rem;
+    max-height: 200px;
+}
+
+.faq-answer p {
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+}
+
+.field-error {
+    color: var(--error-color);
+    font-size: var(--text-sm);
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.field-error::before {
+    content: '⚠';
+    font-size: var(--text-xs);
+}
+
+.success-message {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    background: var(--success-color);
+    color: white;
+    padding: 1.5rem 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    z-index: 1000;
+    animation: slideIn 0.3s ease-out;
+}
+
+.success-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.success-content i {
+    font-size: var(--text-xl);
+}
+
+.success-content h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: var(--text-lg);
+}
+
+.success-content p {
+    margin: 0;
+    font-size: var(--text-sm);
+    opacity: 0.9;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .contact-form-container {
+        padding: 2rem 1.5rem;
+    }
+    
+    .contact-method {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .method-icon {
+        margin: 0 auto;
+    }
+    
+    .social-icons {
+        flex-wrap: wrap;
+    }
+    
+    .success-message {
+        top: 1rem;
+        right: 1rem;
+        left: 1rem;
+    }
+}
+</style>

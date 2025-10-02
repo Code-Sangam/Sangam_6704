@@ -1,0 +1,349 @@
+<!-- Email Verification Page -->
+<section class="verify-email-page">
+    <div class="container">
+        <div class="verify-container">
+            <div class="verify-card">
+                <div class="verify-header">
+                    <div class="verify-icon">
+                        <i class="fas fa-envelope-open"></i>
+                    </div>
+                    <h1 class="verify-title">Verify Your Email</h1>
+                    <p class="verify-subtitle">
+                        We've sent a verification link to your email address
+                    </p>
+                </div>
+                
+                <div class="verify-content">
+                    <% if (user) { %>
+                        <div class="email-info">
+                            <p class="email-text">
+                                A verification email has been sent to:
+                            </p>
+                            <div class="email-address">
+                                <i class="fas fa-envelope"></i>
+                                <%= user.email %>
+                            </div>
+                        </div>
+                    <% } %>
+                    
+                    <div class="verify-instructions">
+                        <h3>What's next?</h3>
+                        <ol class="instruction-list">
+                            <li>Check your email inbox (and spam folder)</li>
+                            <li>Click the verification link in the email</li>
+                            <li>Return to this page to continue</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="verify-actions">
+                        <button class="btn btn-primary" onclick="checkVerification()">
+                            <i class="fas fa-sync-alt"></i>
+                            Check Verification Status
+                        </button>
+                        
+                        <button class="btn btn-outline" onclick="resendEmail()">
+                            <i class="fas fa-paper-plane"></i>
+                            Resend Email
+                        </button>
+                    </div>
+                    
+                    <div class="verify-help">
+                        <h4>Didn't receive the email?</h4>
+                        <ul class="help-list">
+                            <li>Check your spam or junk folder</li>
+                            <li>Make sure <%= user ? user.email : 'your email address' %> is correct</li>
+                            <li>Wait a few minutes and try again</li>
+                            <li>Contact support if you continue having issues</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="verify-footer">
+                    <p>Need help? <a href="/contact" class="help-link">Contact Support</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+async function checkVerification() {
+    const btn = event.target;
+    const originalText = btn.innerHTML;
+    
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+    
+    try {
+        const response = await fetch('/auth/api/status');
+        const data = await response.json();
+        
+        if (data.authenticated && data.user.emailVerified) {
+            // Email is verified, redirect to profile
+            window.location.href = '/profile';
+        } else {
+            // Still not verified
+            showMessage('Email not yet verified. Please check your email and click the verification link.', 'warning');
+        }
+    } catch (error) {
+        showMessage('Error checking verification status. Please try again.', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    }
+}
+
+async function resendEmail() {
+    const btn = event.target;
+    const originalText = btn.innerHTML;
+    
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    
+    try {
+        const response = await fetch('/auth/resend-verification', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (response.ok) {
+            showMessage('Verification email sent! Please check your inbox.', 'success');
+        } else {
+            const data = await response.json();
+            showMessage(data.message || 'Failed to send verification email.', 'error');
+        }
+    } catch (error) {
+        showMessage('Error sending verification email. Please try again.', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    }
+}
+
+function showMessage(message, type) {
+    // Remove existing messages
+    const existingMessages = document.querySelectorAll('.temp-message');
+    existingMessages.forEach(msg => msg.remove());
+    
+    // Create new message
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `alert alert-${type} temp-message`;
+    messageDiv.innerHTML = `
+        <i class="fas fa-${getIcon(type)}"></i>
+        ${message}
+    `;
+    
+    // Insert after verify-actions
+    const actionsDiv = document.querySelector('.verify-actions');
+    actionsDiv.parentNode.insertBefore(messageDiv, actionsDiv.nextSibling);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        messageDiv.remove();
+    }, 5000);
+}
+
+function getIcon(type) {
+    const icons = {
+        success: 'check-circle',
+        error: 'exclamation-circle',
+        warning: 'exclamation-triangle',
+        info: 'info-circle'
+    };
+    return icons[type] || 'info-circle';
+}
+
+// Auto-check verification status every 30 seconds
+setInterval(async () => {
+    try {
+        const response = await fetch('/auth/api/status');
+        const data = await response.json();
+        
+        if (data.authenticated && data.user.emailVerified) {
+            showMessage('Email verified! Redirecting to your profile...', 'success');
+            setTimeout(() => {
+                window.location.href = '/profile';
+            }, 2000);
+        }
+    } catch (error) {
+        // Silently fail
+    }
+}, 30000);
+</script>
+
+<style>
+.verify-email-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    padding: 2rem 0;
+}
+
+.verify-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.verify-card {
+    background: var(--background-card);
+    padding: 3rem;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.verify-header {
+    margin-bottom: 2rem;
+}
+
+.verify-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    color: white;
+    font-size: var(--text-2xl);
+}
+
+.verify-title {
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.verify-subtitle {
+    color: var(--text-secondary);
+    font-size: var(--text-lg);
+}
+
+.verify-content {
+    text-align: left;
+    margin-bottom: 2rem;
+}
+
+.email-info {
+    background: var(--background-secondary);
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.email-text {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.email-address {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: var(--text-lg);
+}
+
+.verify-instructions {
+    margin-bottom: 2rem;
+}
+
+.verify-instructions h3 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: var(--text-lg);
+}
+
+.instruction-list {
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+    padding-left: 1.5rem;
+}
+
+.instruction-list li {
+    margin-bottom: 0.5rem;
+}
+
+.verify-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.verify-help {
+    background: var(--background-secondary);
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    margin-bottom: 2rem;
+}
+
+.verify-help h4 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: var(--text-base);
+}
+
+.help-list {
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+    padding-left: 1.5rem;
+    margin: 0;
+}
+
+.help-list li {
+    margin-bottom: 0.5rem;
+}
+
+.verify-footer {
+    text-align: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.verify-footer p {
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.help-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.help-link:hover {
+    text-decoration: underline;
+}
+
+.temp-message {
+    margin: 1.5rem 0;
+}
+
+@media (max-width: 768px) {
+    .verify-card {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+    }
+    
+    .verify-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .verify-actions .btn {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+</style>

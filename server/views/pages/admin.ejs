@@ -1,0 +1,420 @@
+<%- contentFor('styles') %>
+<link rel="stylesheet" href="/css/admin.css">
+
+<%- contentFor('scripts') %>
+<script src="/js/admin.js"></script>
+
+<div class="admin-container">
+  <!-- Admin Navigation -->
+  <nav class="admin-nav">
+    <div class="nav-header">
+      <div class="nav-brand">
+        <a href="/">
+          <div class="brand-logo">S</div>
+          <span class="brand-text">Admin Panel</span>
+        </a>
+      </div>
+      
+      <div class="nav-user">
+        <span class="user-name"><%= user.profile?.firstName || 'Admin' %></span>
+        <form action="/auth/logout" method="POST" class="logout-form">
+          <button type="submit" class="logout-btn">
+            <i class="icon-log-out"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class="admin-layout">
+    <!-- Left Sidebar -->
+    <div class="admin-sidebar">
+      <div class="sidebar-content">
+        <nav class="sidebar-nav">
+          <!-- Dashboard -->
+          <button class="nav-item active" data-section="dashboard">
+            <i class="icon-bar-chart"></i>
+            <span>Dashboard</span>
+          </button>
+          
+          <!-- User Management -->
+          <button class="nav-item" data-section="users">
+            <i class="icon-users"></i>
+            <span>User Management</span>
+          </button>
+          
+          <!-- Content Moderation -->
+          <button class="nav-item" data-section="content">
+            <i class="icon-message-square"></i>
+            <span>Content Moderation</span>
+          </button>
+          
+          <!-- System Settings -->
+          <% if (user.role === 'super_admin') { %>
+          <button class="nav-item" data-section="settings">
+            <i class="icon-settings"></i>
+            <span>System Settings</span>
+          </button>
+          <% } %>
+          
+          <!-- Analytics -->
+          <button class="nav-item" data-section="analytics">
+            <i class="icon-trending-up"></i>
+            <span>Analytics</span>
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="admin-main">
+      <div class="admin-content">
+        <!-- Dashboard Section -->
+        <div class="admin-section active" id="dashboard">
+          <div class="section-header">
+            <h1>Dashboard</h1>
+            <p>Overview of system statistics and recent activity</p>
+          </div>
+          
+          <!-- Stats Cards -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="icon-users"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-number" id="totalUsers">-</div>
+                <div class="stat-label">Total Users</div>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">
+                <div class="stat-icon">
+                  <i class="icon-message-circle"></i>
+                </div>
+              </div>
+              <div class="stat-content">
+                <div class="stat-number" id="totalMessages">-</div>
+                <div class="stat-label">Total Messages</div>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="icon-activity"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-number" id="activeUsers">-</div>
+                <div class="stat-label">Active Users</div>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="icon-trending-up"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-number" id="growthRate">-</div>
+                <div class="stat-label">Growth Rate</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Charts and Recent Activity -->
+          <div class="dashboard-grid">
+            <div class="dashboard-card">
+              <div class="card-header">
+                <h3>User Distribution</h3>
+              </div>
+              <div class="card-content">
+                <canvas id="userRoleChart" width="400" height="200"></canvas>
+              </div>
+            </div>
+            
+            <div class="dashboard-card">
+              <div class="card-header">
+                <h3>Recent Users</h3>
+              </div>
+              <div class="card-content">
+                <div class="recent-users-list" id="recentUsersList">
+                  <div class="loading">Loading...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Management Section -->
+        <div class="admin-section" id="users">
+          <div class="section-header">
+            <h1>User Management</h1>
+            <p>Manage user accounts, roles, and permissions</p>
+          </div>
+          
+          <!-- User Filters -->
+          <div class="filters-bar">
+            <div class="filter-group">
+              <input type="text" id="userSearch" placeholder="Search users..." class="form-control">
+            </div>
+            
+            <div class="filter-group">
+              <select id="roleFilter" class="form-control">
+                <option value="">All Roles</option>
+                <option value="student">Students</option>
+                <option value="alumni">Alumni</option>
+                <option value="faculty">Faculty</option>
+                <option value="admin">Admins</option>
+              </select>
+            </div>
+            
+            <div class="filter-group">
+              <select id="statusFilter" class="form-control">
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+            
+            <div class="filter-group">
+              <button class="btn btn-primary" id="applyFilters">Apply Filters</button>
+            </div>
+          </div>
+          
+          <!-- Users Table -->
+          <div class="table-container">
+            <table class="users-table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Joined</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <tr>
+                  <td colspan="6" class="loading-row">
+                    <div class="loading">Loading users...</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Pagination -->
+          <div class="pagination-container" id="usersPagination">
+            <!-- Pagination will be generated by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Content Moderation Section -->
+        <div class="admin-section" id="content">
+          <div class="section-header">
+            <h1>Content Moderation</h1>
+            <p>Review and moderate user-generated content</p>
+          </div>
+          
+          <div class="moderation-tabs">
+            <button class="tab-btn active" data-tab="messages">Messages</button>
+            <button class="tab-btn" data-tab="profiles">Profiles</button>
+            <button class="tab-btn" data-tab="reports">Reports</button>
+          </div>
+          
+          <div class="tab-content">
+            <div class="tab-pane active" id="messages-tab">
+              <div class="content-list" id="messagesList">
+                <div class="loading">Loading messages...</div>
+              </div>
+            </div>
+            
+            <div class="tab-pane" id="profiles-tab">
+              <div class="content-list" id="profilesList">
+                <div class="loading">Loading profiles...</div>
+              </div>
+            </div>
+            
+            <div class="tab-pane" id="reports-tab">
+              <div class="content-list" id="reportsList">
+                <div class="loading">Loading reports...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Settings Section -->
+        <% if (user.role === 'super_admin') { %>
+        <div class="admin-section" id="settings">
+          <div class="section-header">
+            <h1>System Settings</h1>
+            <p>Configure system-wide settings and preferences</p>
+          </div>
+          
+          <div class="settings-tabs">
+            <button class="tab-btn active" data-tab="general">General</button>
+            <button class="tab-btn" data-tab="security">Security</button>
+            <button class="tab-btn" data-tab="features">Features</button>
+            <button class="tab-btn" data-tab="limits">Limits</button>
+          </div>
+          
+          <form id="systemSettingsForm">
+            <div class="tab-content">
+              <div class="tab-pane active" id="general-tab">
+                <div class="settings-group">
+                  <h3>General Settings</h3>
+                  
+                  <div class="form-group">
+                    <label for="siteName">Site Name</label>
+                    <input type="text" id="siteName" name="general.siteName" class="form-control">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="siteDescription">Site Description</label>
+                    <textarea id="siteDescription" name="general.siteDescription" class="form-control" rows="3"></textarea>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="checkbox-label">
+                      <input type="checkbox" id="maintenanceMode" name="general.maintenanceMode">
+                      <span class="checkmark"></span>
+                      Maintenance Mode
+                    </label>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="checkbox-label">
+                      <input type="checkbox" id="registrationEnabled" name="general.registrationEnabled">
+                      <span class="checkmark"></span>
+                      Registration Enabled
+                    </label>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="tab-pane" id="security-tab">
+                <div class="settings-group">
+                  <h3>Security Settings</h3>
+                  
+                  <div class="form-group">
+                    <label for="passwordMinLength">Minimum Password Length</label>
+                    <input type="number" id="passwordMinLength" name="security.passwordMinLength" class="form-control" min="6" max="20">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="maxLoginAttempts">Max Login Attempts</label>
+                    <input type="number" id="maxLoginAttempts" name="security.maxLoginAttempts" class="form-control" min="3" max="10">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="lockoutDuration">Lockout Duration (minutes)</label>
+                    <input type="number" id="lockoutDuration" name="security.lockoutDuration" class="form-control" min="5" max="60">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="tab-pane" id="features-tab">
+                <div class="settings-group">
+                  <h3>Feature Settings</h3>
+                  
+                  <div class="form-group">
+                    <label class="checkbox-label">
+                      <input type="checkbox" id="chatEnabled" name="features.chatEnabled">
+                      <span class="checkmark"></span>
+                      Chat System Enabled
+                    </label>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="checkbox-label">
+                      <input type="checkbox" id="fileUploadEnabled" name="features.fileUploadEnabled">
+                      <span class="checkmark"></span>
+                      File Upload Enabled
+                    </label>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="checkbox-label">
+                      <input type="checkbox" id="notificationsEnabled" name="features.notificationsEnabled">
+                      <span class="checkmark"></span>
+                      Notifications Enabled
+                    </label>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="tab-pane" id="limits-tab">
+                <div class="settings-group">
+                  <h3>System Limits</h3>
+                  
+                  <div class="form-group">
+                    <label for="maxFileSize">Max File Size (MB)</label>
+                    <input type="number" id="maxFileSize" name="limits.maxFileSize" class="form-control" min="1" max="50">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="maxMessagesPerDay">Max Messages Per Day</label>
+                    <input type="number" id="maxMessagesPerDay" name="limits.maxMessagesPerDay" class="form-control" min="100" max="10000">
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Save Settings</button>
+              <button type="button" class="btn btn-secondary" onclick="loadSystemSettings()">Reset</button>
+            </div>
+          </form>
+        </div>
+        <% } %>
+
+        <!-- Analytics Section -->
+        <div class="admin-section" id="analytics">
+          <div class="section-header">
+            <h1>Analytics</h1>
+            <p>Detailed analytics and insights</p>
+          </div>
+          
+          <div class="analytics-grid">
+            <div class="analytics-card">
+              <div class="card-header">
+                <h3>Messages Over Time</h3>
+              </div>
+              <div class="card-content">
+                <canvas id="messagesChart" width="400" height="200"></canvas>
+              </div>
+            </div>
+            
+            <div class="analytics-card">
+              <div class="card-header">
+                <h3>User Activity</h3>
+              </div>
+              <div class="card-content">
+                <div class="activity-metrics" id="activityMetrics">
+                  <div class="loading">Loading metrics...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- User Details Modal -->
+<div class="modal" id="userModal" style="display: none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>User Details</h2>
+      <button class="modal-close" onclick="closeUserModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="userModalBody">
+      <!-- User details will be loaded here -->
+    </div>
+  </div>
+</div>
+
+<!-- Success/Error Messages -->
+<div id="messageContainer" class="message-container"></div>

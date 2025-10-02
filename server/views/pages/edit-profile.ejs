@@ -1,0 +1,1082 @@
+<!-- 
+Profile Edit Page -->
+<section class="edit-profile-page">
+    <div class="container">
+        <div class="edit-layout">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="header-content">
+                    <h1 class="page-title">
+                        <i class="fas fa-user-edit"></i>
+                        Edit Profile
+                    </h1>
+                    <p class="page-description">
+                        Update your profile information to help others connect with you
+                    </p>
+                </div>
+                
+                <div class="header-actions">
+                    <a href="/profile" class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Profile
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Edit Form -->
+            <form class="edit-form" id="profile-form" action="/api/profile/update" method="POST">
+                <div class="form-sections">
+                    <!-- Basic Information -->
+                    <div class="form-section" id="basic-section">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <i class="fas fa-user"></i>
+                                Basic Information
+                            </h2>
+                        </div>
+                        
+                        <div class="section-content">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName" class="form-label">First Name *</label>
+                                    <input 
+                                        type="text" 
+                                        id="firstName" 
+                                        name="firstName" 
+                                        class="form-input" 
+                                        value="<%= user.firstName || '' %>"
+                                        required
+                                    >
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="lastName" class="form-label">Last Name *</label>
+                                    <input 
+                                        type="text" 
+                                        id="lastName" 
+                                        name="lastName" 
+                                        class="form-input" 
+                                        value="<%= user.lastName || '' %>"
+                                        required
+                                    >
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bio" class="form-label">Bio</label>
+                                <textarea 
+                                    id="bio" 
+                                    name="bio" 
+                                    class="form-textarea" 
+                                    rows="4"
+                                    placeholder="Tell others about yourself, your interests, and what you're passionate about..."
+                                ><%= user.bio || '' %></textarea>
+                                <div class="character-count">
+                                    <span id="bio-count">0</span> / 1000 characters
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Professional Information -->
+                    <% if (user.role === 'alumni' || user.role === 'faculty') { %>
+                        <div class="form-section" id="professional-section">
+                            <div class="section-header">
+                                <h2 class="section-title">
+                                    <i class="fas fa-briefcase"></i>
+                                    Professional Information
+                                </h2>
+                            </div>
+                            
+                            <div class="section-content">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="company" class="form-label">Company</label>
+                                        <input 
+                                            type="text" 
+                                            id="company" 
+                                            name="company" 
+                                            class="form-input" 
+                                            value="<%= user.company || '' %>"
+                                            placeholder="Enter your company name"
+                                        >
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="position" class="form-label">Position</label>
+                                        <input 
+                                            type="text" 
+                                            id="position" 
+                                            name="position" 
+                                            class="form-input" 
+                                            value="<%= user.position || '' %>"
+                                            placeholder="Enter your job title"
+                                        >
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="industry" class="form-label">Industry</label>
+                                        <select id="industry" name="industry" class="form-select">
+                                            <option value="">Select Industry</option>
+                                            <option value="technology" <%= user.industry === 'technology' ? 'selected' : '' %>>Technology</option>
+                                            <option value="finance" <%= user.industry === 'finance' ? 'selected' : '' %>>Finance</option>
+                                            <option value="healthcare" <%= user.industry === 'healthcare' ? 'selected' : '' %>>Healthcare</option>
+                                            <option value="education" <%= user.industry === 'education' ? 'selected' : '' %>>Education</option>
+                                            <option value="consulting" <%= user.industry === 'consulting' ? 'selected' : '' %>>Consulting</option>
+                                            <option value="manufacturing" <%= user.industry === 'manufacturing' ? 'selected' : '' %>>Manufacturing</option>
+                                            <option value="retail" <%= user.industry === 'retail' ? 'selected' : '' %>>Retail</option>
+                                            <option value="media" <%= user.industry === 'media' ? 'selected' : '' %>>Media & Entertainment</option>
+                                            <option value="nonprofit" <%= user.industry === 'nonprofit' ? 'selected' : '' %>>Non-Profit</option>
+                                            <option value="government" <%= user.industry === 'government' ? 'selected' : '' %>>Government</option>
+                                            <option value="other" <%= user.industry === 'other' ? 'selected' : '' %>>Other</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="experienceYears" class="form-label">Years of Experience</label>
+                                        <select id="experienceYears" name="experienceYears" class="form-select">
+                                            <option value="">Select Experience</option>
+                                            <option value="0" <%= user.experienceYears === 0 ? 'selected' : '' %>>Less than 1 year</option>
+                                            <option value="1" <%= user.experienceYears === 1 ? 'selected' : '' %>>1-2 years</option>
+                                            <option value="3" <%= user.experienceYears === 3 ? 'selected' : '' %>>3-5 years</option>
+                                            <option value="6" <%= user.experienceYears === 6 ? 'selected' : '' %>>6-10 years</option>
+                                            <option value="11" <%= user.experienceYears === 11 ? 'selected' : '' %>>11-15 years</option>
+                                            <option value="16" <%= user.experienceYears === 16 ? 'selected' : '' %>>16+ years</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                    
+                    <!-- Educational Information -->
+                    <% if (user.role === 'student' || user.role === 'alumni') { %>
+                        <div class="form-section" id="education-section">
+                            <div class="section-header">
+                                <h2 class="section-title">
+                                    <i class="fas fa-graduation-cap"></i>
+                                    Education
+                                </h2>
+                            </div>
+                            
+                            <div class="section-content">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="university" class="form-label">University/Institution</label>
+                                        <input 
+                                            type="text" 
+                                            id="university" 
+                                            name="university" 
+                                            class="form-input" 
+                                            value="<%= user.university || '' %>"
+                                            placeholder="Enter your university name"
+                                        >
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="major" class="form-label">Major/Field of Study</label>
+                                        <input 
+                                            type="text" 
+                                            id="major" 
+                                            name="major" 
+                                            class="form-input" 
+                                            value="<%= user.major || '' %>"
+                                            placeholder="Enter your major"
+                                        >
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="degree" class="form-label">Degree</label>
+                                        <select id="degree" name="degree" class="form-select">
+                                            <option value="">Select Degree</option>
+                                            <option value="bachelor" <%= user.degree === 'bachelor' ? 'selected' : '' %>>Bachelor's</option>
+                                            <option value="master" <%= user.degree === 'master' ? 'selected' : '' %>>Master's</option>
+                                            <option value="phd" <%= user.degree === 'phd' ? 'selected' : '' %>>PhD</option>
+                                            <option value="diploma" <%= user.degree === 'diploma' ? 'selected' : '' %>>Diploma</option>
+                                            <option value="certificate" <%= user.degree === 'certificate' ? 'selected' : '' %>>Certificate</option>
+                                            <option value="other" <%= user.degree === 'other' ? 'selected' : '' %>>Other</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="graduationYear" class="form-label">
+                                            <%= user.role === 'student' ? 'Expected Graduation Year' : 'Graduation Year' %>
+                                        </label>
+                                        <input 
+                                            type="number" 
+                                            id="graduationYear" 
+                                            name="graduationYear" 
+                                            class="form-input" 
+                                            value="<%= user.graduationYear || '' %>"
+                                            min="1970"
+                                            max="<%= new Date().getFullYear() + 10 %>"
+                                            placeholder="e.g., 2024"
+                                        >
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="gpa" class="form-label">GPA (Optional)</label>
+                                    <input 
+                                        type="number" 
+                                        id="gpa" 
+                                        name="gpa" 
+                                        class="form-input" 
+                                        value="<%= user.gpa || '' %>"
+                                        min="0"
+                                        max="4"
+                                        step="0.01"
+                                        placeholder="e.g., 3.75"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                    
+                    <!-- Contact Information -->
+                    <div class="form-section" id="contact-section">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <i class="fas fa-address-book"></i>
+                                Contact Information
+                            </h2>
+                        </div>
+                        
+                        <div class="section-content">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input 
+                                        type="tel" 
+                                        id="phone" 
+                                        name="phone" 
+                                        class="form-input" 
+                                        value="<%= user.phone || '' %>"
+                                        placeholder="+1 (555) 123-4567"
+                                    >
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="location" class="form-label">Location</label>
+                                    <input 
+                                        type="text" 
+                                        id="location" 
+                                        name="location" 
+                                        class="form-input" 
+                                        value="<%= user.location || '' %>"
+                                        placeholder="City, State/Country"
+                                    >
+                                </div>
+                            </div>
+                            
+                            <div class="privacy-settings">
+                                <h4>Privacy Settings</h4>
+                                <div class="privacy-options">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="showEmail" <%= user.showEmail ? 'checked' : '' %>>
+                                        <span class="checkbox-custom"></span>
+                                        Show email address to other members
+                                    </label>
+                                    
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="showPhone" <%= user.showPhone ? 'checked' : '' %>>
+                                        <span class="checkbox-custom"></span>
+                                        Show phone number to other members
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Social Links -->
+                    <div class="form-section" id="social-section">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <i class="fas fa-share-alt"></i>
+                                Social Links
+                            </h2>
+                        </div>
+                        
+                        <div class="section-content">
+                            <div class="form-group">
+                                <label for="linkedinUrl" class="form-label">
+                                    <i class="fab fa-linkedin"></i>
+                                    LinkedIn Profile
+                                </label>
+                                <input 
+                                    type="url" 
+                                    id="linkedinUrl" 
+                                    name="linkedinUrl" 
+                                    class="form-input" 
+                                    value="<%= user.linkedinUrl || '' %>"
+                                    placeholder="https://linkedin.com/in/yourprofile"
+                                >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="githubUrl" class="form-label">
+                                    <i class="fab fa-github"></i>
+                                    GitHub Profile
+                                </label>
+                                <input 
+                                    type="url" 
+                                    id="githubUrl" 
+                                    name="githubUrl" 
+                                    class="form-input" 
+                                    value="<%= user.githubUrl || '' %>"
+                                    placeholder="https://github.com/yourusername"
+                                >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="twitterUrl" class="form-label">
+                                    <i class="fab fa-twitter"></i>
+                                    Twitter Profile
+                                </label>
+                                <input 
+                                    type="url" 
+                                    id="twitterUrl" 
+                                    name="twitterUrl" 
+                                    class="form-input" 
+                                    value="<%= user.twitterUrl || '' %>"
+                                    placeholder="https://twitter.com/yourusername"
+                                >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="websiteUrl" class="form-label">
+                                    <i class="fas fa-globe"></i>
+                                    Personal Website
+                                </label>
+                                <input 
+                                    type="url" 
+                                    id="websiteUrl" 
+                                    name="websiteUrl" 
+                                    class="form-input" 
+                                    value="<%= user.websiteUrl || '' %>"
+                                    placeholder="https://yourwebsite.com"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Skills & Interests -->
+                    <div class="form-section" id="skills-section">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <i class="fas fa-lightbulb"></i>
+                                Skills & Interests
+                            </h2>
+                        </div>
+                        
+                        <div class="section-content">
+                            <div class="form-group">
+                                <label for="skills" class="form-label">Skills</label>
+                                <div class="tags-input-container">
+                                    <input 
+                                        type="text" 
+                                        id="skills-input" 
+                                        class="tags-input" 
+                                        placeholder="Type a skill and press Enter"
+                                    >
+                                    <div class="tags-display" id="skills-display"></div>
+                                </div>
+                                <input type="hidden" name="skills" id="skills-hidden">
+                                <div class="form-help">Press Enter or comma to add skills</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="interests" class="form-label">Interests</label>
+                                <div class="tags-input-container">
+                                    <input 
+                                        type="text" 
+                                        id="interests-input" 
+                                        class="tags-input" 
+                                        placeholder="Type an interest and press Enter"
+                                    >
+                                    <div class="tags-display" id="interests-display"></div>
+                                </div>
+                                <input type="hidden" name="interests" id="interests-hidden">
+                                <div class="form-help">Press Enter or comma to add interests</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Mentorship Preferences -->
+                    <div class="form-section" id="mentorship-section">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <i class="fas fa-hands-helping"></i>
+                                Mentorship Preferences
+                            </h2>
+                        </div>
+                        
+                        <div class="section-content">
+                            <div class="mentorship-options">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="isMentor" <%= user.isMentor ? 'checked' : '' %>>
+                                    <span class="checkbox-custom"></span>
+                                    I'm available as a mentor
+                                </label>
+                                
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="isSeekingMentor" <%= user.isSeekingMentor ? 'checked' : '' %>>
+                                    <span class="checkbox-custom"></span>
+                                    I'm seeking mentorship
+                                </label>
+                                
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="isOpenToOpportunities" <%= user.isOpenToOpportunities ? 'checked' : '' %>>
+                                    <span class="checkbox-custom"></span>
+                                    I'm open to career opportunities
+                                </label>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="preferredContactMethod" class="form-label">Preferred Contact Method</label>
+                                <select id="preferredContactMethod" name="preferredContactMethod" class="form-select">
+                                    <option value="platform" <%= user.preferredContactMethod === 'platform' ? 'selected' : '' %>>Through this platform</option>
+                                    <option value="email" <%= user.preferredContactMethod === 'email' ? 'selected' : '' %>>Email</option>
+                                    <option value="phone" <%= user.preferredContactMethod === 'phone' ? 'selected' : '' %>>Phone</option>
+                                    <option value="linkedin" <%= user.preferredContactMethod === 'linkedin' ? 'selected' : '' %>>LinkedIn</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="resetForm()">
+                        <i class="fas fa-undo"></i>
+                        Reset Changes
+                    </button>
+                    
+                    <button type="submit" class="btn btn-primary" id="save-btn">
+                        <i class="fas fa-save"></i>
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<scr
+ipt>
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    initializeTagsInput();
+    initializeCharacterCount();
+    initializeFormValidation();
+    
+    // Set current page for navigation
+    document.body.dataset.page = 'profile';
+});
+
+// Tags input functionality
+function initializeTagsInput() {
+    const skillsData = <%= JSON.stringify(user.skills || []) %>;
+    const interestsData = <%= JSON.stringify(user.interests || []) %>;
+    
+    setupTagsInput('skills', skillsData);
+    setupTagsInput('interests', interestsData);
+}
+
+function setupTagsInput(type, initialData) {
+    const input = document.getElementById(`${type}-input`);
+    const display = document.getElementById(`${type}-display`);
+    const hidden = document.getElementById(`${type}-hidden`);
+    
+    let tags = [...initialData];
+    
+    function updateDisplay() {
+        display.innerHTML = '';
+        tags.forEach((tag, index) => {
+            const tagElement = document.createElement('span');
+            tagElement.className = 'tag-item';
+            tagElement.innerHTML = `
+                ${tag}
+                <button type="button" class="tag-remove" onclick="removeTag('${type}', ${index})">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            display.appendChild(tagElement);
+        });
+        
+        hidden.value = JSON.stringify(tags);
+    }
+    
+    function addTag(tagText) {
+        const tag = tagText.trim();
+        if (tag && !tags.includes(tag) && tags.length < 10) {
+            tags.push(tag);
+            updateDisplay();
+            input.value = '';
+        }
+    }
+    
+    // Event listeners
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ',') {
+            e.preventDefault();
+            addTag(this.value);
+        }
+    });
+    
+    input.addEventListener('blur', function() {
+        if (this.value.trim()) {
+            addTag(this.value);
+        }
+    });
+    
+    // Global function for removing tags
+    window.removeTag = function(tagType, index) {
+        if (tagType === type) {
+            tags.splice(index, 1);
+            updateDisplay();
+        }
+    };
+    
+    // Initial display
+    updateDisplay();
+}
+
+// Character count for bio
+function initializeCharacterCount() {
+    const bioTextarea = document.getElementById('bio');
+    const charCount = document.getElementById('bio-count');
+    
+    function updateCount() {
+        const count = bioTextarea.value.length;
+        charCount.textContent = count;
+        
+        if (count > 1000) {
+            charCount.style.color = 'var(--error-color)';
+            bioTextarea.value = bioTextarea.value.substring(0, 1000);
+            charCount.textContent = '1000';
+        } else {
+            charCount.style.color = 'var(--text-secondary)';
+        }
+    }
+    
+    bioTextarea.addEventListener('input', updateCount);
+    updateCount(); // Initial count
+}
+
+// Form validation
+function initializeFormValidation() {
+    const form = document.getElementById('profile-form');
+    const inputs = form.querySelectorAll('input, select, textarea');
+    
+    inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            validateField(this);
+        });
+        
+        input.addEventListener('input', function() {
+            clearFieldError(this);
+        });
+    });
+    
+    form.addEventListener('submit', handleFormSubmit);
+}
+
+function validateField(field) {
+    const value = field.value.trim();
+    const fieldName = field.name;
+    
+    clearFieldError(field);
+    
+    // Required field validation
+    if (field.hasAttribute('required') && !value) {
+        showFieldError(field, `${getFieldLabel(fieldName)} is required`);
+        return false;
+    }
+    
+    // URL validation
+    if (field.type === 'url' && value) {
+        try {
+            new URL(value);
+        } catch {
+            showFieldError(field, 'Please enter a valid URL');
+            return false;
+        }
+    }
+    
+    // Email validation
+    if (field.type === 'email' && value) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+            showFieldError(field, 'Please enter a valid email address');
+            return false;
+        }
+    }
+    
+    // Phone validation
+    if (field.type === 'tel' && value) {
+        const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+        if (!phoneRegex.test(value.replace(/[\s\-\(\)]/g, ''))) {
+            showFieldError(field, 'Please enter a valid phone number');
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+function showFieldError(field, message) {
+    field.classList.add('error');
+    
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'field-error';
+    errorDiv.textContent = message;
+    
+    field.parentElement.appendChild(errorDiv);
+}
+
+function clearFieldError(field) {
+    field.classList.remove('error');
+    
+    const existingError = field.parentElement.querySelector('.field-error');
+    if (existingError) {
+        existingError.remove();
+    }
+}
+
+function getFieldLabel(fieldName) {
+    const labels = {
+        firstName: 'First Name',
+        lastName: 'Last Name',
+        bio: 'Bio',
+        company: 'Company',
+        position: 'Position',
+        university: 'University',
+        major: 'Major',
+        phone: 'Phone Number',
+        location: 'Location'
+    };
+    
+    return labels[fieldName] || fieldName;
+}
+
+// Form submission
+function handleFormSubmit(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    const submitBtn = document.getElementById('save-btn');
+    const originalText = submitBtn.innerHTML;
+    
+    // Validate all required fields
+    const requiredFields = form.querySelectorAll('[required]');
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!validateField(field)) {
+            isValid = false;
+        }
+    });
+    
+    if (!isValid) {
+        SangamApp.notifications.error('Please fix the errors before saving');
+        return;
+    }
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+    
+    // Prepare form data
+    const formData = new FormData(form);
+    const data = {};
+    
+    for (let [key, value] of formData.entries()) {
+        data[key] = value;
+    }
+    
+    // Add skills and interests from hidden fields
+    try {
+        data.skills = JSON.parse(document.getElementById('skills-hidden').value || '[]');
+        data.interests = JSON.parse(document.getElementById('interests-hidden').value || '[]');
+    } catch (e) {
+        data.skills = [];
+        data.interests = [];
+    }
+    
+    // Submit via AJAX
+    fetch('/api/profile/update', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(data => {
+                throw new Error(data.message || 'Failed to update profile');
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        SangamApp.notifications.success('Profile updated successfully!');
+        
+        // Redirect to profile page after a short delay
+        setTimeout(() => {
+            window.location.href = '/profile';
+        }, 1500);
+    })
+    .catch(error => {
+        console.error('Profile update error:', error);
+        SangamApp.notifications.error(error.message || 'Failed to update profile');
+    })
+    .finally(() => {
+        // Reset button state
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+    });
+}
+
+// Reset form
+function resetForm() {
+    if (confirm('Are you sure you want to reset all changes?')) {
+        location.reload();
+    }
+}
+</script>
+
+<style>
+.edit-profile-page {
+    padding: 2rem 0;
+    background: var(--background-secondary);
+    min-height: calc(100vh - 80px);
+}
+
+.edit-layout {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    background: var(--background-card);
+    padding: 2rem;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+}
+
+.header-content h1 {
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.header-content h1 i {
+    color: var(--primary-color);
+}
+
+.page-description {
+    color: var(--text-secondary);
+    font-size: var(--text-lg);
+    margin: 0;
+}
+
+.edit-form {
+    background: var(--background-card);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.form-section {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-section:last-child {
+    border-bottom: none;
+}
+
+.section-header {
+    padding: 1.5rem 2rem;
+    background: var(--background-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.section-title i {
+    color: var(--primary-color);
+}
+
+.section-content {
+    padding: 2rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-size: var(--text-sm);
+}
+
+.form-label i {
+    color: var(--primary-color);
+    width: 16px;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: var(--text-base);
+    transition: all var(--transition-fast);
+    background: var(--background-primary);
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-input.error,
+.form-select.error,
+.form-textarea.error {
+    border-color: var(--error-color);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.character-count {
+    text-align: right;
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+}
+
+.form-help {
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+}
+
+.privacy-settings,
+.mentorship-options {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: var(--background-secondary);
+    border-radius: var(--radius-lg);
+}
+
+.privacy-settings h4,
+.mentorship-options h4 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: var(--text-base);
+}
+
+.privacy-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+}
+
+.checkbox-label input[type="checkbox"] {
+    display: none;
+}
+
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    position: relative;
+    transition: all var(--transition-fast);
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkbox-custom {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkbox-custom::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.tags-input-container {
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.5rem;
+    background: var(--background-primary);
+    transition: border-color var(--transition-fast);
+}
+
+.tags-input-container:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.tags-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0.375rem 0.5rem;
+    font-size: var(--text-base);
+    background: transparent;
+}
+
+.tags-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.tag-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    background: var(--primary-light);
+    color: var(--primary-color);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: 500;
+}
+
+.tag-remove {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color var(--transition-fast);
+}
+
+.tag-remove:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.form-actions {
+    padding: 2rem;
+    background: var(--background-secondary);
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.field-error {
+    color: var(--error-color);
+    font-size: var(--text-sm);
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.field-error::before {
+    content: '⚠';
+    font-size: var(--text-xs);
+}
+
+@media (max-width: 768px) {
+    .edit-layout {
+        margin: 0 1rem;
+    }
+    
+    .page-header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1.5rem;
+    }
+    
+    .header-actions {
+        width: 100%;
+    }
+    
+    .header-actions .btn {
+        width: 100%;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .section-content {
+        padding: 1.5rem;
+    }
+    
+    .form-actions {
+        flex-direction: column-reverse;
+        padding: 1.5rem;
+    }
+    
+    .form-actions .btn {
+        width: 100%;
+    }
+}
+</style>

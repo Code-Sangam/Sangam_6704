@@ -1,0 +1,177 @@
+<nav class="navbar">
+    <div class="navbar-container">
+        <!-- Logo and Brand -->
+        <div class="navbar-brand">
+            <a href="/" class="brand-link">
+                <img src="/images/logo.svg" alt="Sangam Logo" class="brand-logo">
+                <span class="brand-text">Sangam Alumni Network</span>
+            </a>
+        </div>
+        
+        <!-- Mobile Menu Toggle -->
+        <button class="navbar-toggle" id="navbar-toggle" aria-label="Toggle navigation">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        
+        <!-- Navigation Links -->
+        <div class="navbar-menu" id="navbar-menu">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/" class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'active' : '' %>">
+                        <i class="fas fa-home"></i>
+                        Home
+                    </a>
+                </li>
+                
+                <% if (isAuthenticated) { %>
+                    <!-- Authenticated User Navigation -->
+                    <li class="nav-item">
+                        <a href="/profile" class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'profile' ? 'active' : '' %>">
+                            <i class="fas fa-user"></i>
+                            Profile
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="/chat" class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'chat' ? 'active' : '' %>">
+                            <i class="fas fa-comments"></i>
+                            Chat
+                            <span class="notification-badge" id="chat-notification" style="display: none;"></span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" id="user-dropdown">
+                            <img src="<%= user.profile?.profilePicture || '/images/default-avatar.svg' %>" alt="Profile" class="nav-avatar">
+                            <%= user.profile?.firstName || user.email.split('@')[0] %>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                        
+                        <ul class="dropdown-menu" id="user-dropdown-menu">
+                            <li>
+                                <a href="/profile" class="dropdown-link">
+                                    <i class="fas fa-user"></i>
+                                    My Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/profile/settings" class="dropdown-link">
+                                    <i class="fas fa-cog"></i>
+                                    Settings
+                                </a>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li>
+                                <form action="/auth/logout" method="POST" class="logout-form">
+                                    <button type="submit" class="dropdown-link logout-btn">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                        Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                <% } else { %>
+                    <!-- Guest Navigation -->
+                    <li class="nav-item">
+                        <a href="/about" class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'about' ? 'active' : '' %>">
+                            <i class="fas fa-info-circle"></i>
+                            About
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="/contact" class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'contact' ? 'active' : '' %>">
+                            <i class="fas fa-envelope"></i>
+                            Contact
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="/auth/login" class="nav-link btn-outline">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="/auth/register" class="nav-link btn-primary">
+                            <i class="fas fa-user-plus"></i>
+                            Register
+                        </a>
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<script>
+// Navbar functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const navbarToggle = document.getElementById('navbar-toggle');
+    const navbarMenu = document.getElementById('navbar-menu');
+    const userDropdown = document.getElementById('user-dropdown');
+    const userDropdownMenu = document.getElementById('user-dropdown-menu');
+    
+    // Mobile menu toggle
+    if (navbarToggle && navbarMenu) {
+        navbarToggle.addEventListener('click', function() {
+            navbarMenu.classList.toggle('active');
+            navbarToggle.classList.toggle('active');
+        });
+    }
+    
+    // User dropdown toggle
+    if (userDropdown && userDropdownMenu) {
+        userDropdown.addEventListener('click', function(e) {
+            e.preventDefault();
+            userDropdownMenu.classList.toggle('active');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!userDropdown.contains(e.target)) {
+                userDropdownMenu.classList.remove('active');
+            }
+        });
+    }
+    
+    // Close mobile menu when clicking on a link
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (navbarMenu.classList.contains('active')) {
+                navbarMenu.classList.remove('active');
+                navbarToggle.classList.remove('active');
+            }
+        });
+    });
+});
+
+// Chat notification functionality (will be enhanced with real data)
+<% if (isAuthenticated) { %>
+function updateChatNotification(count) {
+    const badge = document.getElementById('chat-notification');
+    if (badge) {
+        if (count > 0) {
+            badge.textContent = count > 99 ? '99+' : count;
+            badge.style.display = 'inline-block';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+}
+
+// Listen for new messages via socket
+if (typeof socket !== 'undefined') {
+    socket.on('message:receive', function(message) {
+        // Update notification badge
+        const currentCount = parseInt(document.getElementById('chat-notification')?.textContent || '0');
+        updateChatNotification(currentCount + 1);
+    });
+}
+<% } %>
+</script>

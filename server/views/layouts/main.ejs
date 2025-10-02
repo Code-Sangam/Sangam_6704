@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title || 'Sangam Alumni Network' %></title>
+    <meta name="description" content="<%= description || 'Connect with alumni and students from your institution' %>">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/themes.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/interactive.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link rel="stylesheet" href="/css/mobile.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Additional page-specific CSS -->
+    <% if (typeof additionalCSS !== 'undefined') { %>
+        <% additionalCSS.forEach(function(css) { %>
+            <link rel="stylesheet" href="<%= css %>">
+        <% }); %>
+    <% } %>
+    
+    <!-- Page specific CSS -->
+    <% if (typeof currentPage !== 'undefined' && currentPage === 'home') { %>
+        <link rel="stylesheet" href="/css/homepage.css">
+    <% } %>
+    
+    <% if (typeof currentPage !== 'undefined' && (currentPage === 'login' || currentPage === 'register' || currentPage === 'forgot-password' || currentPage === 'reset-password' || currentPage === 'verify-email')) { %>
+        <link rel="stylesheet" href="/css/auth.css">
+    <% } %>
+</head>
+<body class="<%= typeof bodyClass !== 'undefined' ? bodyClass : '' %>">
+    <!-- Navigation -->
+    <%- include('../partials/navbar') %>
+    
+    <!-- Flash Messages -->
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-error" id="flash-message">
+            <i class="fas fa-exclamation-circle"></i>
+            <%= error %>
+            <button class="alert-close" onclick="closeAlert()">&times;</button>
+        </div>
+    <% } %>
+    
+    <% if (typeof success !== 'undefined' && success) { %>
+        <div class="alert alert-success" id="flash-message">
+            <i class="fas fa-check-circle"></i>
+            <%= success %>
+            <button class="alert-close" onclick="closeAlert()">&times;</button>
+        </div>
+    <% } %>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <%- body %>
+    </main>
+    
+    <!-- Footer -->
+    <%- include('../partials/footer') %>
+    
+    <!-- Core JavaScript -->
+    <script src="/js/main.js"></script>
+    <script src="/js/components.js"></script>
+    
+    <!-- Socket.io for real-time features -->
+    <% if (isAuthenticated) { %>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            // Initialize socket connection for authenticated users
+            window.socket = io();
+            
+            // Join user to their room
+            if (window.socket && typeof user !== 'undefined') {
+                window.socket.emit('user:join', {
+                    id: '<%= user.id %>',
+                    role: '<%= user.role %>',
+                    name: '<%= user.firstName %> <%= user.lastName %>'
+                });
+            }
+        </script>
+    <% } %>
+    
+    <!-- Additional page-specific JavaScript -->
+    <% if (typeof additionalJS !== 'undefined') { %>
+        <% additionalJS.forEach(function(js) { %>
+            <script src="<%= js %>"></script>
+        <% }); %>
+    <% } %>
+    
+    <!-- Page specific JavaScript -->
+    <% if (typeof currentPage !== 'undefined' && currentPage === 'home') { %>
+        <script src="/js/homepage.js"></script>
+    <% } %>
+    
+    <% if (typeof currentPage !== 'undefined' && (currentPage === 'login' || currentPage === 'register' || currentPage === 'forgot-password' || currentPage === 'reset-password' || currentPage === 'verify-email')) { %>
+        <script src="/js/auth.js"></script>
+    <% } %>
+    
+    <!-- Inline JavaScript for page-specific functionality -->
+    <% if (typeof inlineJS !== 'undefined') { %>
+        <script>
+            <%= inlineJS %>
+        </script>
+    <% } %>
+</body>
+</html>
