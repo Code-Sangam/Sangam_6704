@@ -57,9 +57,17 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Static files
-app.use(express.static(path.join(__dirname, '../public')));
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+// Static files - with debugging
+const publicPath = path.join(__dirname, '../public');
+const uploadsPath = path.join(__dirname, '../uploads');
+
+console.log('📁 Static file paths:');
+console.log('  Public:', publicPath);
+console.log('  Uploads:', uploadsPath);
+console.log('  __dirname:', __dirname);
+
+app.use(express.static(publicPath));
+app.use('/uploads', express.static(uploadsPath));
 
 // View engine setup
 app.set('view engine', 'ejs');
@@ -126,6 +134,8 @@ const startServer = async () => {
     console.log('🚀 Starting Sangam Alumni Network server...');
     console.log(`📱 Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`🔌 Port: ${PORT}`);
+    console.log(`📂 Current working directory: ${process.cwd()}`);
+    console.log(`📂 __dirname: ${__dirname}`);
     
     // Initialize database connection
     console.log('📊 Initializing database connection...');

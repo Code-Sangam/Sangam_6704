@@ -213,7 +213,25 @@ Add these variables for better production performance:
 
 ## Common Issues and Solutions
 
-### Issue 1: Error Log Files During Deployment
+### Issue 1: 404 Error After Successful Deployment
+**Symptoms**: Deployment completes but website shows "page can't be found" or 404 error
+
+**Solutions**:
+1. **Check if server is running**:
+   - Visit `https://your-app.up.railway.app/health`
+   - Should show server status JSON
+2. **Verify Root Directory setting**:
+   - Go to Railway service → Settings → Source
+   - Set **Root Directory** to `server`
+   - Redeploy
+3. **Check Railway logs**:
+   - Go to Deployments tab
+   - Look for startup errors or path issues
+4. **Debug paths**:
+   - Visit `https://your-app.up.railway.app/debug`
+   - Check if paths are correct
+
+### Issue 2: Error Log Files During Deployment
 **Symptoms**: Deployment shows error files like "logs.1759411337420.json"
 
 **Solutions**:

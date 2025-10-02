@@ -1,13 +1,58 @@
 const express = require('express');
 const router = express.Router();
 
+// Health check route (for debugging)
+router.get('/health', (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'Server is running',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+    cwd: process.cwd(),
+    dirname: __dirname
+  });
+});
+
+// Debug route to check paths
+router.get('/debug', (req, res) => {
+  const fs = require('fs');
+  const path = require('path');
+
+  const viewsPath = path.join(__dirname, '../views');
+  const publicPath = path.join(__dirname, '../../public');
+
+  res.json({
+    paths: {
+      cwd: process.cwd(),
+      dirname: __dirname,
+      viewsPath: viewsPath,
+      publicPath: publicPath,
+      viewsExists: fs.existsSync(viewsPath),
+      publicExists: fs.existsSync(publicPath)
+    },
+    env: {
+      NODE_ENV: process.env.NODE_ENV,
+      PORT: process.env.PORT
+    }
+  });
+});
+
 // Homepage route
 router.get('/', (req, res) => {
-  res.render('pages/home', {
-    title: 'Sangam Alumni Network',
-    description: 'Connect with alumni and students from your institution',
-    currentPage: 'home'
-  });
+  try {
+    res.render('pages/home', {
+      title: 'Sangam Alumni Network',
+      description: 'Connect with alumni and students from your institution',
+      currentPage: 'home'
+    });
+  } catch (error) {
+    console.error('Homepage render error:', error);
+    res.status(500).send(`
+      <h1>Server Error</h1>
+      <p>Error rendering homepage: ${error.message}</p>
+      <p>Please check server logs for details.</p>
+    `);
+  }
 });
 
 // About page
@@ -32,17 +77,17 @@ router.get('/contact', (req, res) => {
 router.post('/contact', async (req, res) => {
   try {
     const { firstName, lastName, email, subject, message, newsletter } = req.body;
-    
+
     // Basic validation
     if (!firstName || !lastName || !email || !subject || !message) {
       req.session.error = 'All required fields must be filled';
       return res.redirect('/contact');
     }
-    
+
     // TODO: Send email notification to admin
     // TODO: Save contact form submission to database
     // TODO: Send confirmation email to user
-    
+
     console.log('Contact form submission:', {
       firstName,
       lastName,
@@ -52,10 +97,10 @@ router.post('/contact', async (req, res) => {
       newsletter: !!newsletter,
       timestamp: new Date()
     });
-    
+
     req.session.success = 'Thank you for your message! We\'ll get back to you within 24 hours.';
     res.redirect('/contact');
-    
+
   } catch (error) {
     console.error('Contact form error:', error);
     req.session.error = 'An error occurred while sending your message. Please try again.';
@@ -100,7 +145,7 @@ router.get('/chat', require('../middleware/auth').requireAuth, (req, res) => {
 });
 
 // Admin panel (requires admin permissions)
-router.get('/admin', 
+router.get('/admin',
   require('../middleware/auth').requireAuth,
   require('../middleware/permissions').requirePermission('admin:access_panel'),
   (req, res) => {
