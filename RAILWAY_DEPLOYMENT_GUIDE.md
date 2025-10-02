@@ -213,23 +213,51 @@ Add these variables for better production performance:
 
 ## Common Issues and Solutions
 
-### Issue 1: 404 Error After Successful Deployment
+### Issue 1: Repeated Error Log Files (logs.XXXXXXXXX.json)
+**Symptoms**: Deployment keeps failing with error log files
+
+**Step-by-Step Solution**:
+
+**Step 1: Use Simplified Server**
+The project now includes a simplified server (`app-simple.js`) that should work:
+1. **Commit and push** the latest changes
+2. **Wait for Railway to redeploy**
+3. **Test**: `https://your-app.up.railway.app/`
+
+**Step 2: Check Railway Settings**
+1. Go to Railway service → **Settings** → **Source**
+2. Set **Root Directory** to `server`
+3. **Redeploy**
+
+**Step 3: Verify Environment Variables**
+1. Go to Railway service → **Variables**
+2. **Add PostgreSQL database** if not already added:
+   - Click **"+ New"** → **"Database"** → **"PostgreSQL"**
+3. **Check required variables**:
+   - `DATABASE_URL` (should be automatic)
+   - `NODE_ENV` = `production`
+   - `SESSION_SECRET` = `your-secret-key`
+
+**Step 4: Test Endpoints**
+After deployment, test these URLs:
+- `https://your-app.up.railway.app/` (main page)
+- `https://your-app.up.railway.app/health` (server status)
+- `https://your-app.up.railway.app/debug` (detailed info)
+- `https://your-app.up.railway.app/test-db` (database test)
+
+**Step 5: Check Railway Logs**
+1. Go to **Deployments** tab
+2. Click on latest deployment
+3. **Read the full error logs**
+4. Look for specific error messages
+
+### Issue 2: 404 Error After Successful Deployment
 **Symptoms**: Deployment completes but website shows "page can't be found" or 404 error
 
 **Solutions**:
-1. **Check if server is running**:
-   - Visit `https://your-app.up.railway.app/health`
-   - Should show server status JSON
-2. **Verify Root Directory setting**:
-   - Go to Railway service → Settings → Source
-   - Set **Root Directory** to `server`
-   - Redeploy
-3. **Check Railway logs**:
-   - Go to Deployments tab
-   - Look for startup errors or path issues
-4. **Debug paths**:
-   - Visit `https://your-app.up.railway.app/debug`
-   - Check if paths are correct
+1. **Use the simplified server** (should be automatic now)
+2. **Check Railway Root Directory** setting
+3. **Test the health endpoint** first
 
 ### Issue 2: Error Log Files During Deployment
 **Symptoms**: Deployment shows error files like "logs.1759411337420.json"

@@ -1,0 +1,22 @@
+{
+  "name": "sangam-alumni-network-server",
+  "version": "1.0.0",
+  "description": "Express.js server for Sangam Alumni Network",
+  "main": "app-simple.js",
+  "scripts": {
+    "start": "node app-simple.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "sequelize": "^6.35.2",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "keywords": ["express", "alumni", "network"],
+  "author": "Sangam Alumni Network Team",
+  "license": "MIT"
+}
