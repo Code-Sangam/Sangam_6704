@@ -1,1 +1,1 @@
-web: cd server && node app-simple.js
+web: node app.js

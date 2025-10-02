@@ -2,9 +2,10 @@
   "name": "sangam-alumni-network-server",
   "version": "1.0.0",
   "description": "Traditional Express.js server for Sangam Alumni Network",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node app-simple.js",
+    "start": "node index.js",
+    "start:simple": "node app-simple.js",
     "start:full": "node app.js",
     "start:railway": "NODE_ENV=production node app-simple.js",
     "dev": "nodemon app.js",
