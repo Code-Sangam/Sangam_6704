@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "build": "webpack --mode production",
+    "build": "echo 'Express.js server - no build step required'",
+    "build:webpack": "webpack --mode production",
     "build:dev": "webpack --mode development",
     "test": "jest",
     "test:watch": "jest --watch",
