@@ -123,23 +123,39 @@ const PORT = process.env.PORT || 3000;
 // Initialize database and start server
 const startServer = async () => {
   try {
+    console.log('🚀 Starting Sangam Alumni Network server...');
+    console.log(`📱 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🔌 Port: ${PORT}`);
+    
     // Initialize database connection
+    console.log('📊 Initializing database connection...');
     await initializeDatabase();
+    console.log('✅ Database connection established');
     
     // Sync session store
+    console.log('🔄 Synchronizing session store...');
     await sessionStore.sync();
-    console.log('📊 Session store synchronized');
+    console.log('✅ Session store synchronized');
     
     // Start server
-    server.listen(PORT, () => {
+    server.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 Sangam Alumni Network server running on port ${PORT}`);
-      console.log(`📱 Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`🔗 Server URL: http://localhost:${PORT}`);
+      console.log(`🔗 Server URL: http://0.0.0.0:${PORT}`);
+      console.log('✅ Server started successfully');
     });
     
   } catch (error) {
-    console.error('❌ Failed to start server:', error.message);
-    process.exit(1);
+    console.error('❌ Failed to start server:', error);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
+    
+    // Give some time for logs to flush
+    setTimeout(() => {
+      process.exit(1);
+    }, 1000);
   }
 };
 

@@ -213,7 +213,22 @@ Add these variables for better production performance:
 
 ## Common Issues and Solutions
 
-### Issue 1: Docker Build Errors (webpack.config.js not found)
+### Issue 1: Error Log Files During Deployment
+**Symptoms**: Deployment shows error files like "logs.1759411337420.json"
+
+**Solutions**:
+1. **Check Railway logs** for the actual error details:
+   - Go to your service in Railway
+   - Click "Deployments" tab
+   - Click on the failed deployment
+   - Read the full error logs
+2. **Common causes**:
+   - Missing `DATABASE_URL` environment variable
+   - Incorrect database connection settings
+   - Missing required environment variables
+3. **Quick fix**: Ensure `DATABASE_URL` is set correctly in Railway
+
+### Issue 2: Docker Build Errors (webpack.config.js not found)
 **Symptoms**: Build fails with "webpack.config.js not found" or similar Docker errors
 
 **Solutions**:

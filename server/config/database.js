@@ -76,18 +76,22 @@ const environment = process.env.NODE_ENV || 'development';
 const dbConfig = config[environment];
 
 // Create Sequelize instance
-const sequelize = new Sequelize(
-  dbConfig.database,
-  dbConfig.username,
-  dbConfig.password,
-  {
-    host: dbConfig.host,
-    port: dbConfig.port,
-    dialect: dbConfig.dialect,
-    logging: dbConfig.logging,
+// Use DATABASE_URL if available (Railway/Heroku style), otherwise use individual config
+let sequelize;
+
+if (process.env.DATABASE_URL) {
+  // Use DATABASE_URL (Railway, Heroku, etc.)
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
+    dialect: 'postgres',
+    logging: environment === 'development' ? console.log : false,
     pool: dbConfig.pool,
     define: dbConfig.define,
-    dialectOptions: dbConfig.dialectOptions || {},
+    dialectOptions: {
+      ssl: environment === 'production' ? {
+        require: true,
+        rejectUnauthorized: false
+      } : false
+    },
     
     // Additional Sequelize options
     retry: {
@@ -118,8 +122,54 @@ const sequelize = new Sequelize(
     query: {
       raw: false
     }
-  }
-);
+  });
+} else {
+  // Use individual config variables (local development)
+  sequelize = new Sequelize(
+    dbConfig.database,
+    dbConfig.username,
+    dbConfig.password,
+    {
+      host: dbConfig.host,
+      port: dbConfig.port,
+      dialect: dbConfig.dialect,
+      logging: dbConfig.logging,
+      pool: dbConfig.pool,
+      define: dbConfig.define,
+      dialectOptions: dbConfig.dialectOptions || {},
+      
+      // Additional Sequelize options
+      retry: {
+        match: [
+          /ETIMEDOUT/,
+          /EHOSTUNREACH/,
+          /ECONNRESET/,
+          /ECONNREFUSED/,
+          /ETIMEDOUT/,
+          /ESOCKETTIMEDOUT/,
+          /EHOSTUNREACH/,
+          /EPIPE/,
+          /EAI_AGAIN/,
+          /SequelizeConnectionError/,
+          /SequelizeConnectionRefusedError/,
+          /SequelizeHostNotFoundError/,
+          /SequelizeHostNotReachableError/,
+          /SequelizeInvalidConnectionError/,
+          /SequelizeConnectionTimedOutError/
+        ],
+        max: 3
+      },
+      
+      // Timezone configuration
+      timezone: '+00:00',
+      
+      // Query options
+      query: {
+        raw: false
+      }
+    }
+  );
+}
 
 // Test database connection
 const testConnection = async () => {
