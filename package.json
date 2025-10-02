@@ -4,7 +4,8 @@
   "description": "Alumni Network Platform",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node deploy-anywhere.js",
+    "start:app": "node app.js",
     "server": "cd server && node index.js"
   },
   "dependencies": {
