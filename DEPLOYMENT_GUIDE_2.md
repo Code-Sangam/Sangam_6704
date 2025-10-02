@@ -6,6 +6,21 @@ This guide will walk you through deploying the Sangam Alumni Network completely 
 
 ---
 
+## 🚂 **RECOMMENDED: Use Railway (Method 1)**
+
+**For the best experience with your alumni network, we strongly recommend Railway because:**
+
+- ✅ **Everything works perfectly** - Chat, sessions, file uploads
+- ✅ **Simplest setup** - Deploy in 10 minutes
+- ✅ **No configuration headaches** - Just works out of the box
+- ✅ **Built for full-stack apps** like yours
+
+**📖 See detailed Railway guide**: [RAILWAY_DEPLOYMENT_GUIDE.md](./RAILWAY_DEPLOYMENT_GUIDE.md)
+
+---
+
+---
+
 ## 🎯 What You'll Get
 
 - **✅ Free Web Hosting** (Railway/Render/Heroku)
@@ -26,7 +41,18 @@ Before we start, make sure you have:
 
 ---
 
-# Method 1: Railway (Recommended - Easiest)
+# Method 1: Railway (🥇 HIGHLY RECOMMENDED)
+
+**🚂 Railway is THE BEST choice for your alumni network!**
+
+**Why Railway is Perfect for Your App:**
+✅ **Real-time chat works perfectly** (Socket.io support)
+✅ **Users stay logged in** (persistent sessions)
+✅ **File uploads work flawlessly** (profile pictures, attachments)
+✅ **Built-in PostgreSQL database** (no separate setup)
+✅ **Automatic deployments** from GitHub
+✅ **Professional hosting** with SSL certificates
+✅ **Simple configuration** - no complex setup needed
 
 Railway offers the simplest deployment with automatic builds and free PostgreSQL database.
 
@@ -262,6 +288,10 @@ web: cd server && npm start
 
 # Method 4: Vercel + Supabase (Advanced Free)
 
+⚠️ **Important Note**: Vercel is complex for Express.js apps. **Railway (Method 1) is much easier and recommended** for your type of application.
+
+**Use this method only if you specifically need Vercel's edge network or are experienced with serverless deployments.**
+
 For those who want a more advanced setup with edge deployment and a powerful free database.
 
 ## Step 1: Database Setup with Supabase (Free PostgreSQL)
@@ -420,9 +450,20 @@ If you prefer individual details, Neon also shows:
 3. Configure:
    - **Framework Preset**: Other
    - **Root Directory**: `server`
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `dist`
+   - **Build Command**: Leave empty
+   - **Output Directory**: Leave empty
    - **Install Command**: `npm install`
+
+**Important: Vercel Configuration**
+Vercel will automatically detect the `vercel.json` file in your server directory and configure itself properly for Express.js.
+
+**If You Still Get Build Errors:**
+1. Go to your Vercel project **Settings**
+2. Under **General**, set:
+   - **Build Command**: Leave empty
+   - **Output Directory**: Leave empty
+   - **Install Command**: `npm install`
+3. **Redeploy** your project
 
 ### 3.3 Add Environment Variables
 Add all the environment variables from previous methods, plus your database `DATABASE_URL`:
@@ -929,6 +970,102 @@ You've successfully deployed your Sangam Alumni Network for free!
 3. Check environment variables
 4. Verify database connectivity
 5. Review application logs
+
+---
+
+---
+
+# 🚨 Common Deployment Errors & Fixes
+
+## Error: "webpack: command not found" (Vercel Method 4)
+
+**Error Message:**
+```
+sh: line 1: webpack: command not found
+Error: Command "npm run build" exited with 127
+```
+
+### **Immediate Fix Steps:**
+
+**Step 1: Fix the Package.json (Already Done)**
+The server/package.json has been updated to fix the build script.
+
+**Step 2: Update Vercel Build Settings**
+1. Go to your **Vercel project dashboard**
+2. Click **"Settings"** tab
+3. Go to **"General"** section
+4. Update these settings:
+   - **Build Command**: Leave completely empty
+   - **Output Directory**: Leave completely empty
+   - **Install Command**: `npm install`
+
+**Step 2: Redeploy**
+1. Go to **"Deployments"** tab
+2. Click **"Redeploy"** on the latest deployment
+3. Wait for new deployment to complete
+
+### **Alternative Solutions:**
+
+**Solution A: Fix Build Command**
+Change **Build Command** to:
+```
+npm install && npx webpack --mode production
+```
+
+**Solution B: Update package.json**
+In your `server/package.json`, change the build script:
+```json
+{
+  "scripts": {
+    "build": "echo 'Express.js - no build needed'",
+    "start": "node app.js"
+  }
+}
+```
+
+**Solution C: Switch to Railway (Recommended)**
+Vercel is complex for Express.js. Railway is much easier:
+1. Use **Method 1: Railway** instead
+2. Railway handles Express.js automatically
+3. No build configuration needed
+
+### **Why This Happens:**
+- Vercel expects frontend frameworks that need building
+- Express.js apps run directly without a build step
+- The webpack command isn't needed for server-side applications
+
+---
+
+## Error: Database Connection Issues
+
+**Error Messages:**
+- "Connection refused"
+- "Database does not exist"
+- "Authentication failed"
+
+### **Fix Steps:**
+1. **Check DATABASE_URL format**:
+   ```
+   postgresql://username:password@host:port/database
+   ```
+2. **Verify password** - no special characters that need encoding
+3. **Test connection** using the database provider's built-in tools
+4. **Check environment variables** are set correctly in your hosting platform
+
+---
+
+## Error: App Crashes After Deployment
+
+**Common Causes:**
+- Missing environment variables
+- Database not accessible
+- Port configuration issues
+
+### **Fix Steps:**
+1. **Check logs** in your hosting platform
+2. **Verify all environment variables** are set
+3. **Ensure PORT is set correctly** (usually 3000)
+4. **Check database migrations** ran successfully
 
 ---
 
