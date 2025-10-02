@@ -110,11 +110,9 @@ Click **"New Variable"** for each of these:
 
 ### 5.1 Update Build Configuration
 1. In your web service, go to **"Settings"** tab
-2. Scroll to **"Build"** section
-3. Set these values:
-   - **Root Directory**: `server`
-   - **Build Command**: `npm install`
-   - **Start Command**: `npm start`
+2. Scroll to **"Source"** section
+3. Set **Root Directory**: `server`
+4. Railway will automatically detect your Node.js app and configure build/start commands
 
 ### 5.2 Deploy with New Settings
 1. Go to **"Deployments"** tab
@@ -215,7 +213,16 @@ Add these variables for better production performance:
 
 ## Common Issues and Solutions
 
-### Issue 1: "Application Error" or Crash
+### Issue 1: Docker Build Errors (webpack.config.js not found)
+**Symptoms**: Build fails with "webpack.config.js not found" or similar Docker errors
+
+**Solutions**:
+1. **Remove Dockerfile** from your repository (Railway auto-detection is better)
+2. **Set Root Directory** to `server` in Railway settings
+3. **Let Railway auto-detect** your Node.js app
+4. **Redeploy** after removing Docker files
+
+### Issue 2: "Application Error" or Crash
 **Symptoms**: App shows error page or won't start
 
 **Solutions**:
